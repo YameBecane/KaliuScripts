@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DarkHub | Plataforma Educacional</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="hamburger-menu" id="hamburgerBtn">
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+
+<aside class="sidebar" id="sidebar">
+    <button class="close-sidebar" id="closeSidebarBtn">×</button>
+    <ul>
+        <li><a href="#" data-page="home">Início</a></li>
+        <li><a href="#" data-page="khan">Khan Academy</a></li>
+        <li><a href="#" data-page="quizizz">Quizizz</a></li>
+        <li><a href="#" data-page="alura">Alura</a></li>
+        <li><a href="#" data-page="redacao">RedaçãoPR</a></li>
+        <li><a href="#" data-page="admin">Administração</a></li>
+    </ul>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<main class="container" id="mainContent">
+    <div id="dynamicView"></div>
+</main>
+
+<div id="toastMessage" class="toast-msg hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
