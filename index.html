@@ -3,81 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site Informativo</title>
+    <title>Kaliuscripted | Cheats & Scripts</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <header class="header">
-        <button id="menuToggle" class="menu-btn">
-            <i class="fas fa-bars"></i>
-        </button>
-        <h1>Meu Site Informativo</h1>
-        <div class="header-actions">
-            <!-- Placeholder para futuros ícones -->
-        </div>
-    </header>
+    <!-- TELA DE LOGIN (aparece primeiro, tudo bloqueado) -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-container">
+            <div class="login-window">
+                <div class="window-controls">
+                    <span class="control red"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+                
+                <div class="login-header">
+                    <div class="logo-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <h1>Kaliuscripted</h1>
+                    <p>Cheats & Scripts Hub</p>
+                </div>
 
-    <!-- Sidebar (Aba esquerda) -->
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h3>Menu</h3>
-            <button id="closeSidebar" class="close-btn">&times;</button>
-        </div>
+                <div class="login-body">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="off">
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Senha">
+                    </div>
 
-        <nav class="sidebar-nav">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Informações</a></li>
-                <li><a href="#">Contato</a></li>
-            </ul>
-        </nav>
+                    <button id="doLoginBtn" class="login-btn">
+                        <span>Acessar</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
 
-        <!-- Botão para tela Scripts -->
-        <div class="sidebar-scripts">
-            <button id="scriptsBtn" class="scripts-btn">
-                <i class="fas fa-code"></i> Scripts
-            </button>
-        </div>
+                    <div class="login-divider">
+                        <span>ou</span>
+                    </div>
 
-        <!-- Viewer de Login no final da sidebar -->
-        <div class="sidebar-login-viewer">
-            <div class="avatar">
-                <span id="userInitials">??</span>
+                    <button id="showRegisterBtn" class="register-link-btn">
+                        <i class="fas fa-user-plus"></i> Criar nova conta
+                    </button>
+                </div>
+
+                <div class="login-footer">
+                    <span>v2.0.1</span>
+                </div>
             </div>
-            <div class="user-info">
-                <span id="userName">Visitante</span>
-                <span id="userNick" class="user-nick">(não logado)</span>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Overlay para fechar sidebar em mobile -->
-    <div id="overlay" class="overlay"></div>
-
-    <!-- Conteúdo principal -->
-    <main class="main-content">
-        <div class="content-card">
-            <h2>Bem-vindo ao site!</h2>
-            <p>Este é o conteúdo principal do seu site informativo.</p>
-            <p>A sidebar ao lado esquerdo contém o menu, botão Scripts e o visualizador de login.</p>
-        </div>
-    </main>
-
-    <!-- Modal para tela Scripts (exemplo) -->
-    <div id="scriptsModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Tela de Scripts</h2>
-            <p>Aqui você pode adicionar seus scripts personalizados.</p>
-            <textarea placeholder="Digite seu script aqui..."></textarea>
-            <button class="save-script-btn">Salvar Script</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- TELA DE REGISTRO (modal style) -->
+    <div id="registerOverlay" class="register-overlay" style="display: none;">
+        <div class="register-window">
+            <div class="window-controls">
+                <span class="control red" id="closeRegister"></span>
+                <span class="control yellow"></span>
+                <span class="control green"></span>
+            </div>
+            
+            <div class="register-header">
+                <i class="fas fa-user-astronaut"></i>
+                <h2>Criar conta</h2>
+            </div>
+
+            <div class="register-body">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="regName" placeholder="Nome completo">
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-tag"></i>
+                    <input type="text" id="regNick" placeholder="Apelido">
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="regEmail" placeholder="E-mail">
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="regPassword" placeholder="Senha (mínimo 6 caracteres)">
+                </div>
+
+                <button id="doRegisterBtn" class="register-btn">Registrar</button>
+                <button id="backToLoginBtn" class="back-btn">← Voltar ao login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL (SÓ APARECE DEPOIS DE LOGAR) -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        
+        <!-- Header estilo macOS -->
+        <header class="mac-header">
+            <div class="mac-header-left">
+                <button id="menuToggle" class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="mac-title">
+                    <span>Kaliuscripted</span>
+                </div>
+            </div>
+            
+            <div class="mac-header-center">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar scripts...">
+                </div>
+            </div>
+            
+            <div class="mac-header-right">
+                <div class="user-profile-header" id="userProfileHeader">
+                    <div class="user-avatar-small" id="userAvatarSmall">
+                        <span id="userInitialsHeader">??</span>
+                    </div>
+                    <span id="userNameHeader">Usuário</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar estilo macOS -->
+        <aside id="sidebar" class="mac-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-terminal"></i>
+                    <span>Menu</span>
+                </div>
+                <button id="closeSidebar" class="close-sidebar-btn">&times;</button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-item active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" class="nav-item" data-page="cheats"><i class="fas fa-gamepad"></i> Cheats</a></li>
+                    <li><a href="#" class="nav-item" data-page="scripts"><i class="fas fa-code"></i> Scripts</a></li>
+                    <li><a href="#" class="nav-item" data-page="tools"><i class="fas fa-tools"></i> Tools</a></li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button id="scriptsModalBtn" class="scripts-sidebar-btn">
+                    <i class="fas fa-terminal"></i> Console Scripts
+                </button>
+                
+                <div class="user-info-sidebar">
+                    <div class="avatar-sidebar" id="avatarSidebar">
+                        <span id="userInitialsSide">??</span>
+                    </div>
+                    <div class="user-text">
+                        <span id="userNameSide">Visitante</span>
+                        <span id="userNickSide" class="user-nick-side">@user</span>
+                    </div>
+                </div>
+                
+                <button id="logoutMainBtn" class="logout-sidebar-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </aside>
+
+        <div id="overlay" class="overlay"></div>
+
+        <!-- Conteúdo principal -->
+        <main class="mac-main-content">
+            <div id="dashboardPage" class="page-content active-page">
+                <div class="welcome-card">
+                    <div class="card-glass">
+                        <h1>Bem-vindo, <span id="welcomeUserName">User</span></h1>
+                        <p>Seu hub de cheats e scripts profissional</p>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-code"></i>
+                                <div class="stat-info">
+                                    <h3>12</h3>
+                                    <span>Scripts ativos</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-database"></i>
+                                <div class="stat-info">
+                                    <h3>5</h3>
+                                    <span>Cheats disponíveis</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-users"></i>
+                                <div class="stat-info">
+                                    <h3>1.2k</h3>
+                                    <span>Usuários online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cheatsPage" class="page-content">
+                <h2>Cheats Disponíveis</h2>
+                <div class="cheats-grid">
+                    <div class="cheat-card">
+                        <i class="fas fa-crosshairs"></i>
+                        <h3>Aimbot Pro</h3>
+                        <p>Precisão milimétrica com ajustes avançados</p>
+                        <button class="cheat-btn">Ativar</button>
+                    </div>
+                    <div class="cheat-card">
+                        <i class="fas fa-eye"></i>
+                        <h3>Wallhack</h3>
+                        <p>Visualize inimigos através das paredes</p>
+                        <button class="cheat-btn">Ativar</button>
+                    </div>
+                    <div class="cheat-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h3>Speed Boost</h3>
+                        <p>Aumente sua velocidade em até 300%</p>
+                        <button class="cheat-btn">Ativar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scriptsPage" class="page-content">
+                <h2>Biblioteca de Scripts</h2>
+                <div class="scripts-library">
+                    <div class="script-item">
+                        <div class="script-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="script-info">
+                            <h4>Auto Farm</h4>
+                            <p>Automatiza coleta de recursos</p>
+                        </div>
+                        <button class="load-script">Carregar</button>
+                    </div>
+                    <div class="script-item">
+                        <div class="script-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="script-info">
+                            <h4>Anti-Ban</h4>
+                            <p>Proteção contra detecção</p>
+                        </div>
+                        <button class="load-script">Carregar</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal Console Scripts -->
+        <div id="consoleModal" class="console-modal">
+            <div class="console-window">
+                <div class="console-header">
+                    <span class="console-dot red"></span>
+                    <span class="console-dot yellow"></span>
+                    <span class="console-dot green"></span>
+                    <span>Script Console - Kaliuscripted</span>
+                    <button class="console-close">&times;</button>
+                </div>
+                <textarea id="consoleInput" placeholder="Digite seu script JavaScript aqui..."></textarea>
+                <div class="console-actions">
+                    <button id="saveConsoleScript" class="console-btn save">💾 Salvar</button>
+                    <button id="runConsoleScript" class="console-btn run">▶ Executar</button>
+                </div>
+                <div id="consoleOutput" class="console-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
