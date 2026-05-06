@@ -2,37 +2,82 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>DarkHub | Plataforma Educacional</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site Informativo</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-<div class="hamburger-menu" id="hamburgerBtn">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
+    <!-- Header -->
+    <header class="header">
+        <button id="menuToggle" class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1>Meu Site Informativo</h1>
+        <div class="header-actions">
+            <!-- Placeholder para futuros ícones -->
+        </div>
+    </header>
 
-<aside class="sidebar" id="sidebar">
-    <button class="close-sidebar" id="closeSidebarBtn">×</button>
-    <ul>
-        <li><a href="#" data-page="home">Início</a></li>
-        <li><a href="#" data-page="khan">Khan Academy</a></li>
-        <li><a href="#" data-page="quizizz">Quizizz</a></li>
-        <li><a href="#" data-page="alura">Alura</a></li>
-        <li><a href="#" data-page="redacao">RedaçãoPR</a></li>
-        <li><a href="#" data-page="admin">Administração</a></li>
-    </ul>
-</aside>
-<div class="overlay" id="overlay"></div>
+    <!-- Sidebar (Aba esquerda) -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button id="closeSidebar" class="close-btn">&times;</button>
+        </div>
 
-<main class="container" id="mainContent">
-    <div id="dynamicView"></div>
-</main>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Informações</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+        </nav>
 
-<div id="toastMessage" class="toast-msg hidden"></div>
+        <!-- Botão para tela Scripts -->
+        <div class="sidebar-scripts">
+            <button id="scriptsBtn" class="scripts-btn">
+                <i class="fas fa-code"></i> Scripts
+            </button>
+        </div>
 
-<script src="script.js"></script>
+        <!-- Viewer de Login no final da sidebar -->
+        <div class="sidebar-login-viewer">
+            <div class="avatar">
+                <span id="userInitials">??</span>
+            </div>
+            <div class="user-info">
+                <span id="userName">Visitante</span>
+                <span id="userNick" class="user-nick">(não logado)</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay para fechar sidebar em mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+        <div class="content-card">
+            <h2>Bem-vindo ao site!</h2>
+            <p>Este é o conteúdo principal do seu site informativo.</p>
+            <p>A sidebar ao lado esquerdo contém o menu, botão Scripts e o visualizador de login.</p>
+        </div>
+    </main>
+
+    <!-- Modal para tela Scripts (exemplo) -->
+    <div id="scriptsModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Tela de Scripts</h2>
+            <p>Aqui você pode adicionar seus scripts personalizados.</p>
+            <textarea placeholder="Digite seu script aqui..."></textarea>
+            <button class="save-script-btn">Salvar Script</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
