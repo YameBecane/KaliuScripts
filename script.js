@@ -1,161 +1,137 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+// ========== PARTICLES SYSTEM ==========
+const canvas = document.getElementById('particlesCanvas');
+const ctx = canvas.getContext('2d');
 
-// Configuração do Firebase (usando seus dados)
-const firebaseConfig = {
-    apiKey: "AIzaSyDEFAULT_USE_YOUR_API_KEY", // <-- VOCÊ PRECISA PEGAR A API KEY PÚBLICA
-    authDomain: "kaliuscripted.firebaseapp.com",
-    databaseURL: "https://kaliuscripted-default-rtdb.firebaseio.com",
-    projectId: "kaliuscripted",
-    storageBucket: "kaliuscripted.firebasestorage.app",
-    messagingSenderId: "SEU_MESSAGING_SENDER_ID", // <-- complete
-    appId: "SEU_APP_ID" // <-- complete
-};
+let particles = [];
+const PARTICLE_COUNT = 80;
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const database = getDatabase(app);
-
-let currentUser = null;
-
-// Elementos DOM
-const loginOverlay = document.getElementById('loginOverlay');
-const registerOverlay = document.getElementById('registerOverlay');
-const mainApp = document.getElementById('mainApp');
-
-// Função para mostrar notificações estilo toast
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-        <div style="background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'}; 
-                    color: white; padding: 12px 20px; border-radius: 8px; 
-                    position: fixed; bottom: 20px; right: 20px; z-index: 10000;
-                    animation: slideIn 0.3s ease;">
-            ${message}
-        </div>
-    `;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+class Particle {
+    constructor() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.2;
+    }
+    
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x < 0) this.x = window.innerWidth;
+        if (this.x > window.innerWidth) this.x = 0;
+        if (this.y < 0) this.y = window.innerHeight;
+        if (this.y > window.innerHeight) this.y = 0;
+    }
+    
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 255, 255, ${this.opacity})`;
+        ctx.fill();
+    }
 }
 
-// Login
-document.getElementById('doLoginBtn')?.addEventListener('click', async () => {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    if (!email || !password) {
-        showToast('Preencha todos os campos', 'error');
-        return;
+function initParticles() {
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Particle());
     }
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+    });
+    requestAnimationFrame(animateParticles);
+}
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+animateParticles();
+
+// ========== LOGIN SYSTEM (FIXED CREDENTIALS) ==========
+const FIXED_USERNAME = "Dev";
+const FIXED_PASSWORD = "86271415";
+
+const loginScreen = document.getElementById('loginScreen');
+const mainApp = document.getElementById('mainApp');
+const loginForm = document.getElementById('loginForm');
+const welcomeUserSpan = document.getElementById('welcomeUser');
+const userInitialsBadge = document.getElementById('userInitialsBadge');
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
     
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        showToast('Login realizado com sucesso!', 'success');
-    } catch (error) {
-        showToast('Erro: ' + error.message, 'error');
-    }
-});
-
-// Mostrar registro
-document.getElementById('showRegisterBtn')?.addEventListener('click', () => {
-    loginOverlay.style.display = 'none';
-    registerOverlay.style.display = 'flex';
-});
-
-// Fechar registro
-document.getElementById('closeRegister')?.addEventListener('click', () => {
-    registerOverlay.style.display = 'none';
-    loginOverlay.style.display = 'flex';
-});
-
-document.getElementById('backToLoginBtn')?.addEventListener('click', () => {
-    registerOverlay.style.display = 'none';
-    loginOverlay.style.display = 'flex';
-});
-
-// Registrar
-document.getElementById('doRegisterBtn')?.addEventListener('click', async () => {
-    const name = document.getElementById('regName').value;
-    const nick = document.getElementById('regNick').value;
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
     
-    if (!name || !email || !password) {
-        showToast('Preencha todos os campos obrigatórios', 'error');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showToast('Senha deve ter no mínimo 6 caracteres', 'error');
-        return;
-    }
-    
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(userCredential.user, { displayName: name });
-        
-        // Salvar no Realtime Database
-        await set(ref(database, `users/${userCredential.user.uid}`), {
-            name: name,
-            nick: nick || email.split('@')[0],
-            email: email,
-            createdAt: new Date().toISOString()
-        });
-        
-        showToast('Conta criada com sucesso!', 'success');
-        registerOverlay.style.display = 'none';
-    } catch (error) {
-        showToast('Erro: ' + error.message, 'error');
-    }
-});
-
-// Monitorar estado do usuário
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        currentUser = user;
-        
-        // Carregar nick do database
-        const snapshot = await get(child(ref(database), `users/${user.uid}`));
-        let userNick = user.email.split('@')[0];
-        let userName = user.displayName || user.email.split('@')[0];
-        
-        if (snapshot.exists()) {
-            userNick = snapshot.val().nick || userNick;
-            userName = snapshot.val().name || userName;
-        }
-        
-        // Atualizar UI
-        const initials = userName.substring(0, 2).toUpperCase();
-        document.querySelectorAll('#userInitialsHeader, #userInitialsSide').forEach(el => {
-            if (el) el.textContent = initials;
-        });
-        document.getElementById('welcomeUserName').textContent = userName;
-        document.getElementById('userNameHeader').textContent = userName.split(' ')[0];
-        document.getElementById('userNameSide').textContent = userName;
-        document.getElementById('userNickSide').textContent = `@${userNick}`;
-        
-        // Mostrar app principal
-        loginOverlay.style.display = 'none';
-        registerOverlay.style.display = 'none';
+    if (username === FIXED_USERNAME && password === FIXED_PASSWORD) {
+        // Login successful
+        loginScreen.style.display = 'none';
         mainApp.style.display = 'block';
         
+        // Update user info
+        welcomeUserSpan.textContent = username;
+        const initials = username.substring(0, 2).toUpperCase();
+        userInitialsBadge.textContent = initials;
+        
+        // Store session
+        sessionStorage.setItem('loggedIn', 'true');
+        sessionStorage.setItem('username', username);
+        
+        // Small animation effect
+        document.body.style.background = '#050505';
     } else {
-        currentUser = null;
-        mainApp.style.display = 'none';
-        loginOverlay.style.display = 'flex';
-        registerOverlay.style.display = 'none';
+        // Error effect
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.style.borderColor = '#ff4444';
+            input.style.boxShadow = '0 0 10px rgba(255, 68, 68, 0.3)';
+        });
+        
+        setTimeout(() => {
+            inputs.forEach(input => {
+                input.style.borderColor = 'rgba(0, 255, 255, 0.2)';
+                input.style.boxShadow = 'none';
+            });
+        }, 1000);
+        
+        // Clear password
+        document.getElementById('password').value = '';
     }
 });
 
-// Logout
-document.getElementById('logoutMainBtn')?.addEventListener('click', async () => {
-    await signOut(auth);
-    showToast('Logout realizado', 'info');
+// Check if already logged in
+if (sessionStorage.getItem('loggedIn') === 'true') {
+    loginScreen.style.display = 'none';
+    mainApp.style.display = 'block';
+    const username = sessionStorage.getItem('username') || 'Dev';
+    welcomeUserSpan.textContent = username;
+    userInitialsBadge.textContent = username.substring(0, 2).toUpperCase();
+}
+
+// ========== SOCIAL BUTTONS ==========
+document.getElementById('discordBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.open('https://discord.gg/kaliuscripted', '_blank');
 });
 
-// Sidebar controls
+document.getElementById('youtubeBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.open('https://youtube.com/@kaliuscripted', '_blank');
+});
+
+// ========== SIDEBAR CONTROLS ==========
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
 const closeSidebar = document.getElementById('closeSidebar');
@@ -176,19 +152,19 @@ overlay?.addEventListener('click', () => {
     overlay.classList.remove('active');
 });
 
-// Navegação entre páginas
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', (e) => {
+// ========== PAGE NAVIGATION ==========
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
         e.preventDefault();
-        const page = item.dataset.page;
+        const page = link.dataset.page;
         
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        item.classList.add('active');
+        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+        link.classList.add('active');
         
-        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(`${page}Page`).classList.add('active-page');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`${page}Page`).classList.add('active');
         
-        // Fechar sidebar em mobile
+        // Close sidebar on mobile
         if (window.innerWidth < 768) {
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
@@ -196,12 +172,22 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
-// Console Scripts
-const scriptsModalBtn = document.getElementById('scriptsModalBtn');
+// ========== LOGOUT ==========
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    sessionStorage.removeItem('loggedIn');
+    sessionStorage.removeItem('username');
+    mainApp.style.display = 'none';
+    loginScreen.style.display = 'flex';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+});
+
+// ========== CONSOLE MODAL ==========
+const scriptsConsoleBtn = document.getElementById('scriptsConsoleBtn');
 const consoleModal = document.getElementById('consoleModal');
 const consoleClose = document.querySelector('.console-close');
 
-scriptsModalBtn?.addEventListener('click', () => {
+scriptsConsoleBtn?.addEventListener('click', () => {
     consoleModal.style.display = 'flex';
 });
 
@@ -215,53 +201,99 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Salvar script
-document.getElementById('saveConsoleScript')?.addEventListener('click', async () => {
-    if (!currentUser) return;
-    const script = document.getElementById('consoleInput').value;
-    
-    try {
-        await set(ref(database, `scripts/${currentUser.uid}/lastScript`), {
-            script: script,
-            updatedAt: new Date().toISOString()
-        });
-        showToast('Script salvo no Firebase!', 'success');
-    } catch (error) {
-        showToast('Erro ao salvar', 'error');
-    }
-});
+// ========== SCRIPT EXECUTION ==========
+const runScriptBtn = document.getElementById('runScriptBtn');
+const saveScriptBtn = document.getElementById('saveScriptBtn');
+const clearConsoleBtn = document.getElementById('clearConsoleBtn');
+const consoleInput = document.getElementById('consoleInput');
+const consoleOutput = document.getElementById('consoleOutput');
 
-// Executar script
-document.getElementById('runConsoleScript')?.addEventListener('click', () => {
-    const script = document.getElementById('consoleInput').value;
-    const output = document.getElementById('consoleOutput');
-    
-    // Salvar console original
-    const originalLog = console.log;
+runScriptBtn?.addEventListener('click', () => {
+    const script = consoleInput.value;
     let outputText = '';
     
+    // Override console.log temporarily
+    const originalLog = console.log;
     console.log = (...args) => {
-        outputText += args.map(arg => String(arg)).join(' ') + '\n';
+        outputText += args.map(arg => {
+            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
+            return String(arg);
+        }).join(' ') + '\n';
         originalLog.apply(console, args);
     };
     
     try {
         const func = new Function(script);
         func();
-        output.innerHTML = `<span style="color:#0f0">▶ Executado com sucesso</span>\n${outputText || 'Sem saída'}`;
+        consoleOutput.innerHTML = `<span style="color:#0f0">✓ Script executed successfully</span>\n${outputText || 'No output'}`;
     } catch (error) {
-        output.innerHTML = `<span style="color:#f00">❌ Erro: ${error.message}</span>`;
+        consoleOutput.innerHTML = `<span style="color:#f00">✗ Error: ${error.message}</span>`;
     }
     
     console.log = originalLog;
 });
 
-// Carregar script salvo
-if (currentUser) {
-    const snapshot = await get(child(ref(database), `scripts/${currentUser.uid}/lastScript`));
-    if (snapshot.exists()) {
-        document.getElementById('consoleInput').value = snapshot.val().script || '';
-    }
+saveScriptBtn?.addEventListener('click', () => {
+    const script = consoleInput.value;
+    localStorage.setItem('savedScript', script);
+    consoleOutput.innerHTML = '<span style="color:#0f0">✓ Script saved to localStorage!</span>';
+    
+    setTimeout(() => {
+        if (consoleOutput.innerHTML.includes('saved')) {
+            setTimeout(() => {
+                if (consoleOutput.innerHTML.includes('saved')) {
+                    consoleOutput.innerHTML = '';
+                }
+            }, 2000);
+        }
+    }, 2000);
+});
+
+clearConsoleBtn?.addEventListener('click', () => {
+    consoleInput.value = '';
+    consoleOutput.innerHTML = '';
+});
+
+// Load saved script
+const savedScript = localStorage.getItem('savedScript');
+if (savedScript && consoleInput) {
+    consoleInput.value = savedScript;
 }
 
-console.log('✅ Site Kaliuscripted carregado - Modo macOS');
+// ========== ADDITIONAL UI FEATURES ==========
+// Open console from dashboard button
+document.querySelectorAll('.open-console').forEach(btn => {
+    btn.addEventListener('click', () => {
+        consoleModal.style.display = 'flex';
+    });
+});
+
+// Navigate to cheats
+document.querySelectorAll('.nav-cheats').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+        document.querySelector('.nav-link[data-page="cheats"]').classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('cheatsPage').classList.add('active');
+        
+        if (window.innerWidth < 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    });
+});
+
+// Cheat activation buttons
+document.querySelectorAll('.cheat-activate').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const cheatName = btn.closest('.cheat-item')?.querySelector('h4')?.textContent || 'Cheat';
+        consoleOutput.innerHTML = `<span style="color:#0f0">✓ ${cheatName} activated successfully!</span>`;
+        setTimeout(() => {
+            if (consoleOutput.innerHTML.includes('activated')) {
+                consoleOutput.innerHTML = '';
+            }
+        }, 3000);
+    });
+});
+
+console.log('✅ Kaliuscripted loaded - Cyberpunk theme active');
