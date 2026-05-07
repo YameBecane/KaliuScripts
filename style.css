@@ -11,9 +11,9 @@ body {
     background: #0a0a0f;
     min-height: 100vh;
     color: #e4e4e7;
+    overflow: hidden;
 }
 
-/* Particles */
 #particlesCanvas {
     position: fixed;
     top: 0;
@@ -25,8 +25,8 @@ body {
     opacity: 0.4;
 }
 
-/* ========== LOGIN PAGE ========== */
-.login-container {
+/* ========== LOGIN SCREEN ========== */
+.login-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -36,10 +36,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: 2000;
 }
 
-.login-box {
+.login-container {
     background: rgba(20, 20, 28, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 24px;
@@ -66,18 +66,18 @@ body {
     color: #a78bfa;
 }
 
-.login-box h2 {
+.login-container h2 {
     text-align: center;
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
 }
 
-.login-box h2 span {
+.login-container h2 span {
     color: #a78bfa;
 }
 
-.login-box p {
+.login-container p {
     text-align: center;
     font-size: 12px;
     color: #6b6b7a;
@@ -120,7 +120,7 @@ body {
     color: #4a4a55;
 }
 
-.login-box button[type="submit"] {
+.login-container button[type="submit"] {
     width: 100%;
     background: linear-gradient(135deg, #3b3b4f, #2a2a3a);
     border: 1px solid rgba(167, 139, 250, 0.3);
@@ -138,7 +138,7 @@ body {
     margin-top: 8px;
 }
 
-.login-box button[type="submit"]:hover {
+.login-container button[type="submit"]:hover {
     background: linear-gradient(135deg, #4a4a60, #3a3a4a);
     border-color: #a78bfa;
     transform: translateY(-1px);
@@ -173,7 +173,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* ========== HOME PAGE (after login) ========== */
+/* ========== HOME PAGE ========== */
 .main-header {
     position: fixed;
     top: 0;
@@ -371,7 +371,8 @@ body {
     padding: 24px 28px;
     margin-left: 0;
     transition: margin-left 0.3s;
-    min-height: calc(100vh - 56px);
+    height: calc(100vh - 56px);
+    overflow-y: auto;
 }
 
 .sidebar.open ~ .main-content {
@@ -780,7 +781,7 @@ input:checked + .toggle-slider:before {
     color: #a78bfa;
 }
 
-/* ========== NOTIFICATION SYSTEM ========== */
+/* Notifications */
 .notification-container {
     position: fixed;
     top: 20px;
@@ -803,21 +804,9 @@ input:checked + .toggle-slider:before {
     border: 1px solid rgba(100, 100, 120, 0.2);
 }
 
-.notification.success {
-    border-left: 4px solid #4ade80;
-}
-
-.notification.error {
-    border-left: 4px solid #ef4444;
-}
-
-.notification.info {
-    border-left: 4px solid #a78bfa;
-}
-
-.notification.warning {
-    border-left: 4px solid #fbbf24;
-}
+.notification.success { border-left: 4px solid #4ade80; }
+.notification.error { border-left: 4px solid #ef4444; }
+.notification.info { border-left: 4px solid #a78bfa; }
 
 .notification-header {
     padding: 12px 16px 8px 16px;
@@ -826,113 +815,47 @@ input:checked + .toggle-slider:before {
     gap: 10px;
 }
 
-.notification-header i {
-    font-size: 20px;
-}
+.notification-header i { font-size: 20px; }
+.notification.success .notification-header i { color: #4ade80; }
+.notification.error .notification-header i { color: #ef4444; }
+.notification.info .notification-header i { color: #a78bfa; }
 
-.notification.success .notification-header i {
-    color: #4ade80;
-}
-
-.notification.error .notification-header i {
-    color: #ef4444;
-}
-
-.notification.info .notification-header i {
-    color: #a78bfa;
-}
-
-.notification.warning .notification-header i {
-    color: #fbbf24;
-}
-
-.notification-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 14px;
-}
-
+.notification-title { flex: 1; font-weight: 600; font-size: 14px; }
 .notification-close {
     background: none;
     border: none;
     color: #8b8b9a;
     cursor: pointer;
     font-size: 18px;
-    padding: 0 4px;
 }
-
 .notification-message {
     padding: 0 16px 14px 46px;
     font-size: 12px;
     color: #b0b0c0;
 }
-
-.notification-progress {
-    height: 3px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-}
-
+.notification-progress { height: 3px; background: rgba(255,255,255,0.1); }
 .notification-progress-bar {
     height: 100%;
     width: 100%;
     animation: progress 3s linear forwards;
 }
+.notification.success .notification-progress-bar { background: #4ade80; }
+.notification.error .notification-progress-bar { background: #ef4444; }
+.notification.info .notification-progress-bar { background: #a78bfa; }
 
-.notification.success .notification-progress-bar {
-    background: #4ade80;
-}
-
-.notification.error .notification-progress-bar {
-    background: #ef4444;
-}
-
-.notification.info .notification-progress-bar {
-    background: #a78bfa;
-}
-
-.notification.warning .notification-progress-bar {
-    background: #fbbf24;
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(100px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideOutRight {
-    from {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(100px);
-    }
-}
-
+/* Animations */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
 @keyframes progress {
     from { width: 100%; }
     to { width: 0%; }
@@ -940,29 +863,15 @@ input:checked + .toggle-slider:before {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .main-content {
-        padding: 16px;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .scripts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .welcome-box h1 {
-        font-size: 22px;
-    }
-    
-    .login-box {
-        width: 90%;
-        max-width: 340px;
-        padding: 30px 24px;
-    }
-    
-    .sidebar.open ~ .main-content {
-        margin-left: 0;
-    }
+    .main-content { padding: 16px; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .scripts-grid { grid-template-columns: 1fr; }
+    .welcome-box h1 { font-size: 22px; }
+    .login-container { width: 90%; max-width: 340px; padding: 30px 24px; }
+    .sidebar.open ~ .main-content { margin-left: 0; }
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1a1a1a; }
+::-webkit-scrollbar-thumb { background: #3b3b4f; border-radius: 4px; }
