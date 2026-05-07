@@ -11,42 +11,33 @@
 
     <canvas id="particlesCanvas"></canvas>
 
-    <!-- Header -->
+    <!-- Header Minimal -->
     <header class="main-header">
-        <div class="header-left">
-            <button id="menuToggle" class="menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="logo">
-                <i class="fas fa-terminal"></i>
-                <span>KALIUSCRIPTED</span>
-            </div>
+        <button id="menuToggle" class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo">
+            <i class="fas fa-terminal"></i>
+            <span>KALIUSCRIPTED</span>
         </div>
         <div class="header-right">
-            <div class="user-info-header">
-                <div class="user-avatar" id="userAvatar">DV</div>
-                <span id="userNameDisplay">Dev</span>
+            <div class="user-badge-mini">
+                <span id="userInitialsMini">DV</span>
+                <button id="logoutMiniBtn" class="logout-icon-mini">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Sidebar -->
+    <!-- Sidebar TABS Melhorada -->
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <i class="fas fa-terminal"></i>
+                <i class="fas fa-cube"></i>
                 <span>MENU</span>
             </div>
             <button id="closeSidebar" class="close-sidebar">&times;</button>
-        </div>
-        
-        <!-- User Viewer na Sidebar -->
-        <div class="sidebar-user-viewer">
-            <div class="sidebar-avatar" id="sidebarAvatar">DV</div>
-            <div class="sidebar-user-info">
-                <span class="sidebar-username" id="sidebarUsername">Dev</span>
-                <span class="sidebar-userstatus">Online</span>
-            </div>
         </div>
 
         <nav class="sidebar-nav">
@@ -54,17 +45,19 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="scripts.html" class="nav-item">
-                <i class="fas fa-store"></i>
-                <span>Scripts Store</span>
+            <a href="library.html" class="nav-item">
+                <i class="fas fa-book-open"></i>
+                <span>Library</span>
             </a>
         </nav>
-        
-        <div class="sidebar-footer">
-            <button id="logoutBtn" class="logout-sidebar-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </button>
+
+        <!-- User Viewer no final da sidebar -->
+        <div class="sidebar-user-footer">
+            <div class="user-avatar-footer" id="sidebarAvatarFooter">DV</div>
+            <div class="user-info-footer">
+                <span class="user-name-footer" id="sidebarUsernameFooter">Dev</span>
+                <span class="user-status-footer">Online</span>
+            </div>
         </div>
     </aside>
 
@@ -72,34 +65,21 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div id="homePage" class="page active">
-            <div class="welcome-box">
-                <h1>Welcome, <span id="welcomeName">Dev</span>!</h1>
-                <p>This is an educational JavaScript library for browser-based scripting experiments. Learn, test, and run scripts in a safe environment.</p>
+        <div id="homePage" class="page active fade-in">
+            <div class="welcome-card">
+                <h1>Welcome, <span id="welcomeName">Dev</span></h1>
+                <p>Educational JavaScript library for browser-based scripting experiments.</p>
             </div>
             
-            <div class="stats-box">
-                <div class="stat-number">
+            <div class="stats-card">
+                <div class="stat-item">
                     <h2>6</h2>
-                    <span>Scripts Available</span>
+                    <span>Scripts</span>
                 </div>
-                <div class="stat-info">
+                <div class="stat-divider"></div>
+                <div class="stat-item">
                     <i class="fas fa-graduation-cap"></i>
-                    <p>Educational purposes only</p>
-                </div>
-            </div>
-
-            <div class="featured-scripts">
-                <h3><i class="fas fa-fire"></i> Active Scripts</h3>
-                <div class="active-scripts-list">
-                    <div class="active-badge">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Wayground Quizizz</span>
-                    </div>
-                    <div class="active-badge">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Khan Academy</span>
-                    </div>
+                    <span>Educational</span>
                 </div>
             </div>
         </div>
