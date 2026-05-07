@@ -3,85 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Kaliuscripted | Library</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Library | Kaliuscripted</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .logo { font-weight: 600; font-size: 14px; }
+        .logo i { color: #007aff; margin-right: 6px; }
+
+        .user-area { display: flex; align-items: center; gap: 12px; }
+        .user-avatar {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, #2c2c2e, #1c1c1e);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #007aff;
+        }
+        .logout-icon {
+            background: none; border: none;
+            color: #ff3b30;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 4px;
+            border-radius: 6px;
+        }
+        .logout-icon:hover { opacity: 1; background: rgba(255, 59, 48, 0.1); }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 48px;
+            left: -260px;
+            width: 260px;
+            height: calc(100% - 48px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-right: 0.5px solid rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar.open { left: 0; }
+
+        .sidebar-nav { flex: 1; padding: 20px 16px; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: #888;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        .nav-link i { width: 20px; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+        .nav-link.active { background: rgba(0, 122, 255, 0.15); color: #007aff; }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-avatar {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #2c2c2e, #1c1c1e);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #007aff;
+        }
+        .sidebar-user-name { display: block; font-size: 14px; font-weight: 500; }
+        .sidebar-user-status { font-size: 11px; color: #34c759; }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 98;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* Main */
+        .main {
+            position: fixed;
+            top: 48px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 32px 40px;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+        .sidebar.open ~ .main { left: 260px; }
+
+        /* Library Header */
+        .lib-header { margin-bottom: 28px; }
+        .lib-header h2 { font-size: 24px; font-weight: 600; margin-bottom: 6px; }
+        .lib-header h2 i { color: #007aff; margin-right: 10px; }
+        .lib-header p { color: #888; font-size: 13px; }
+
+        /* Featured Script (Khan Academy sozinho) */
+        .featured-card {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.12), rgba(0, 0, 0, 0));
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 0.5px solid rgba(0, 122, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .featured-icon { width: 80px; text-align: center; }
+        .featured-icon i { font-size: 48px; color: #007aff; }
+        .featured-info { flex: 1; }
+        .featured-info h3 { font-size: 20px; margin-bottom: 8px; }
+        .featured-info p { font-size: 13px; color: #888; margin-bottom: 10px; }
+        .featured-meta { display: flex; gap: 12px; margin-bottom: 16px; }
+        .featured-meta span { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: rgba(255,255,255,0.08); }
+        .featured-actions { display: flex; gap: 12px; }
+        .btn-featured-install, .btn-featured-copy {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-featured-install {
+            background: #007aff;
+            color: white;
+        }
+        .btn-featured-install:hover { background: #0051d5; transform: translateY(-1px); }
+        .btn-featured-copy {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 0.5px solid rgba(255,255,255,0.1);
+        }
+        .btn-featured-copy:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
+
+        /* Grid 2 Columns */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .script-card {
+            background: rgba(20, 20, 25, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 20px;
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s;
+        }
+        .script-card:hover {
+            border-color: rgba(0, 122, 255, 0.3);
+            background: rgba(25, 25, 30, 0.8);
+        }
+        .script-card.inactive { opacity: 0.5; }
+        .script-card.inactive:hover { opacity: 0.6; }
+
+        .script-icon { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .script-icon i { font-size: 32px; color: #007aff; }
+        .status { font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
+        .status-active { background: rgba(52, 199, 89, 0.15); color: #34c759; }
+        .status-inactive { background: rgba(136, 136, 136, 0.15); color: #888; }
+
+        .script-card h3 { font-size: 16px; margin-bottom: 6px; }
+        .script-card p { font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.4; }
+        .script-meta { display: flex; gap: 8px; margin-bottom: 16px; }
+        .script-meta span { font-size: 9px; padding: 2px 8px; border-radius: 20px; background: rgba(255,255,255,0.06); }
+
+        .script-actions { display: flex; gap: 10px; }
+        .btn-install, .btn-copy {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-install {
+            background: rgba(0, 122, 255, 0.15);
+            color: #007aff;
+            border: 0.5px solid rgba(0, 122, 255, 0.3);
+        }
+        .btn-install:hover:not(.disabled) { background: rgba(0, 122, 255, 0.25); transform: translateY(-1px); }
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-copy:hover:not(.disabled) { background: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
+        .btn-install.disabled, .btn-copy.disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Second Row */
+        .second-row { margin-top: 0; }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            top: 56px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background: rgba(30, 30, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px 18px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+            border-left: 3px solid;
+        }
+        .toast.success { border-left-color: #34c759; }
+        .toast.error { border-left-color: #ff3b30; }
+        .toast.info { border-left-color: #007aff; }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Scroll */
+        .main::-webkit-scrollbar { width: 5px; }
+        .main::-webkit-scrollbar-track { background: transparent; }
+        .main::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        @media (max-width: 768px) {
+            .main { padding: 20px; }
+            .featured-card { flex-direction: column; text-align: center; }
+            .featured-actions { justify-content: center; }
+            .scripts-grid { grid-template-columns: 1fr; }
+            .sidebar.open ~ .main { left: 0; }
+        }
+    </style>
 </head>
 <body>
 
-    <canvas id="particlesCanvas"></canvas>
+    <canvas id="particles"></canvas>
 
-    <!-- Header -->
-    <div class="app-header">
-        <button id="menuBtn" class="menu-button">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="app-logo">
-            <i class="fas fa-terminal"></i>
-            <span>KALIUSCRIPTED</span>
-        </div>
-        <div class="app-user">
+    <div class="header">
+        <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+        <div class="logo"><i class="fas fa-terminal"></i> KALIUSCRIPTED</div>
+        <div class="user-area">
             <div class="user-avatar" id="headerAvatar">DV</div>
-            <button id="logoutHeaderBtn" class="logout-button">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <button id="logoutBtn" class="logout-icon"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </div>
 
-    <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-top">
-            <div class="sidebar-brand">
-                <i class="fas fa-cube"></i>
-                <span>MENU</span>
-                <button id="closeSidebarBtn" class="sidebar-close">&times;</button>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="home.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="library.html" class="nav-link active">
-                    <i class="fas fa-book"></i>
-                    <span>Library</span>
-                </a>
-            </nav>
+        <div class="sidebar-nav">
+            <a href="home.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="library.html" class="nav-link active"><i class="fas fa-book"></i> Library</a>
         </div>
-        <div class="sidebar-user">
-            <div class="user-avatar-lg" id="sidebarAvatar">DV</div>
-            <div class="user-details">
-                <span class="user-name" id="sidebarName">Dev</span>
-                <span class="user-status">● Online</span>
+        <div class="sidebar-footer">
+            <div class="sidebar-avatar" id="sidebarAvatar">DV</div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name" id="sidebarName">Dev</span>
+                <span class="sidebar-user-status">● Online</span>
             </div>
         </div>
     </div>
 
     <div id="overlay" class="overlay"></div>
 
-    <!-- Main Content -->
-    <main class="main-container">
-        <div class="page-header">
+    <main class="main">
+        <div class="lib-header">
             <h2><i class="fas fa-book"></i> Script Library</h2>
             <p>Browse and install automation scripts</p>
         </div>
 
-        <div class="scripts-container">
-            <!-- Script 1 - ACTIVE -->
+        <!-- FEATURED: KHAN ACADEMY (sozinho) -->
+        <div class="featured-card">
+            <div class="featured-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="featured-info">
+                <h3>Khan Academy Helper</h3>
+                <p>Complete automation for Khan Academy. Reveal answers, auto-complete exercises, unlock mastery challenges, and bypass restrictions.</p>
+                <div class="featured-meta">
+                    <span>v1.8.2</span>
+                    <span>Active</span>
+                    <span>Learning Platform</span>
+                </div>
+                <div class="featured-actions">
+                    <button class="btn-featured-install" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
+                        <i class="fas fa-download"></i> Install
+                    </button>
+                    <button class="btn-featured-copy" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID 2 COLUMNS - Scripts Ativos -->
+        <div class="scripts-grid">
+            <!-- Wayground Quizizz - ACTIVE -->
             <div class="script-card">
                 <div class="script-icon">
                     <i class="fas fa-gamepad"></i>
-                    <span class="status active-status">● Active</span>
+                    <span class="status status-active">● Active</span>
                 </div>
-                <div class="script-details">
-                    <h3>Wayground Quizizz</h3>
-                    <p>Auto-answer questions, reveal correct answers, and bypass timers on Quizizz.</p>
-                    <div class="script-meta">
-                        <span class="version">v2.1.0</span>
-                        <span class="category">Quiz Automation</span>
-                    </div>
+                <h3>Wayground Quizizz</h3>
+                <p>Auto-answer questions, reveal correct answers, bypass timers on Quizizz platform.</p>
+                <div class="script-meta">
+                    <span>v2.1.0</span>
+                    <span>Quiz Automation</span>
                 </div>
                 <div class="script-actions">
-                    <button class="btn-install" data-script="quizizz" data-code="load('quizizz-automation')" data-name="Wayground Quizizz">
+                    <button class="btn-install" data-code="load('quizizz-automation')" data-name="Wayground Quizizz">
                         <i class="fas fa-download"></i> Install
                     </button>
                     <button class="btn-copy" data-code="load('quizizz-automation')" data-name="Wayground Quizizz">
@@ -90,123 +404,80 @@
                 </div>
             </div>
 
-            <!-- Script 2 - ACTIVE -->
-            <div class="script-card">
+            <!-- Placeholder vazio para manter grid (ou próximo script ativo) -->
+            <div class="script-card inactive">
                 <div class="script-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span class="status active-status">● Active</span>
+                    <i class="fas fa-hourglass-half"></i>
+                    <span class="status status-inactive">● Coming Soon</span>
                 </div>
-                <div class="script-details">
-                    <h3>Khan Academy Helper</h3>
-                    <p>Reveal answers, auto-complete exercises, and unlock mastery challenges.</p>
-                    <div class="script-meta">
-                        <span class="version">v1.8.2</span>
-                        <span class="category">Learning Platform</span>
-                    </div>
+                <h3>More Scripts</h3>
+                <p>New automation scripts are being developed and will be available soon.</p>
+                <div class="script-meta">
+                    <span>—</span>
+                    <span>Pending</span>
                 </div>
                 <div class="script-actions">
-                    <button class="btn-install" data-script="khan" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
-                        <i class="fas fa-download"></i> Install
-                    </button>
-                    <button class="btn-copy" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
+                    <button class="btn-install disabled" disabled><i class="fas fa-download"></i> Unavailable</button>
+                    <button class="btn-copy disabled" disabled><i class="fas fa-copy"></i> Locked</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Script 3 - INACTIVE -->
+        <!-- GRID 2 COLUMNS - Scripts Inativos -->
+        <div class="scripts-grid second-row">
             <div class="script-card inactive">
                 <div class="script-icon">
                     <i class="fas fa-book"></i>
-                    <span class="status inactive-status">● Inactive</span>
+                    <span class="status status-inactive">● Inactive</span>
                 </div>
-                <div class="script-details">
-                    <h3>Leia Paraná</h3>
-                    <p>Reading comprehension automation with answer extraction.</p>
-                    <div class="script-meta">
-                        <span class="version">v1.2.0</span>
-                        <span class="category">Reading Platform</span>
-                    </div>
-                </div>
+                <h3>Leia Paraná</h3>
+                <p>Reading comprehension automation with answer extraction and text analysis.</p>
+                <div class="script-meta"><span>v1.2.0</span><span>Reading Platform</span></div>
                 <div class="script-actions">
-                    <button class="btn-install disabled" disabled>
-                        <i class="fas fa-download"></i> Unavailable
-                    </button>
-                    <button class="btn-copy disabled" disabled>
-                        <i class="fas fa-copy"></i> Locked
-                    </button>
+                    <button class="btn-install disabled" disabled><i class="fas fa-download"></i> Unavailable</button>
+                    <button class="btn-copy disabled" disabled><i class="fas fa-copy"></i> Locked</button>
                 </div>
             </div>
 
-            <!-- Script 4 - INACTIVE -->
             <div class="script-card inactive">
                 <div class="script-icon">
                     <i class="fas fa-pen-fancy"></i>
-                    <span class="status inactive-status">● Inactive</span>
+                    <span class="status status-inactive">● Inactive</span>
                 </div>
-                <div class="script-details">
-                    <h3>Redação Paraná</h3>
-                    <p>Essay writing assistant with grammar checking.</p>
-                    <div class="script-meta">
-                        <span class="version">v1.0.5</span>
-                        <span class="category">Writing Platform</span>
-                    </div>
-                </div>
+                <h3>Redação Paraná</h3>
+                <p>Essay writing assistant with grammar checking and content suggestions.</p>
+                <div class="script-meta"><span>v1.0.5</span><span>Writing Platform</span></div>
                 <div class="script-actions">
-                    <button class="btn-install disabled" disabled>
-                        <i class="fas fa-download"></i> Unavailable
-                    </button>
-                    <button class="btn-copy disabled" disabled>
-                        <i class="fas fa-copy"></i> Locked
-                    </button>
+                    <button class="btn-install disabled" disabled><i class="fas fa-download"></i> Unavailable</button>
+                    <button class="btn-copy disabled" disabled><i class="fas fa-copy"></i> Locked</button>
                 </div>
             </div>
 
-            <!-- Script 5 - INACTIVE -->
             <div class="script-card inactive">
                 <div class="script-icon">
                     <i class="fas fa-laptop-code"></i>
-                    <span class="status inactive-status">● Inactive</span>
+                    <span class="status status-inactive">● Inactive</span>
                 </div>
-                <div class="script-details">
-                    <h3>Alura Course Helper</h3>
-                    <p>Course completion automation with video tracking.</p>
-                    <div class="script-meta">
-                        <span class="version">v2.0.0</span>
-                        <span class="category">Course Platform</span>
-                    </div>
-                </div>
+                <h3>Alura Course Helper</h3>
+                <p>Course completion automation with video tracking and quiz assistance.</p>
+                <div class="script-meta"><span>v2.0.0</span><span>Course Platform</span></div>
                 <div class="script-actions">
-                    <button class="btn-install disabled" disabled>
-                        <i class="fas fa-download"></i> Unavailable
-                    </button>
-                    <button class="btn-copy disabled" disabled>
-                        <i class="fas fa-copy"></i> Locked
-                    </button>
+                    <button class="btn-install disabled" disabled><i class="fas fa-download"></i> Unavailable</button>
+                    <button class="btn-copy disabled" disabled><i class="fas fa-copy"></i> Locked</button>
                 </div>
             </div>
 
-            <!-- Script 6 - INACTIVE -->
             <div class="script-card inactive">
                 <div class="script-icon">
                     <i class="fas fa-language"></i>
-                    <span class="status inactive-status">● Inactive</span>
+                    <span class="status status-inactive">● Inactive</span>
                 </div>
-                <div class="script-details">
-                    <h3>Inglês Paraná</h3>
-                    <p>Language learning automation with translation assistance.</p>
-                    <div class="script-meta">
-                        <span class="version">v1.3.0</span>
-                        <span class="category">Language Platform</span>
-                    </div>
-                </div>
+                <h3>Inglês Paraná</h3>
+                <p>Language learning automation with translation assistance.</p>
+                <div class="script-meta"><span>v1.3.0</span><span>Language Platform</span></div>
                 <div class="script-actions">
-                    <button class="btn-install disabled" disabled>
-                        <i class="fas fa-download"></i> Unavailable
-                    </button>
-                    <button class="btn-copy disabled" disabled>
-                        <i class="fas fa-copy"></i> Locked
-                    </button>
+                    <button class="btn-install disabled" disabled><i class="fas fa-download"></i> Unavailable</button>
+                    <button class="btn-copy disabled" disabled><i class="fas fa-copy"></i> Locked</button>
                 </div>
             </div>
         </div>
@@ -214,6 +485,135 @@
 
     <div id="toast"></div>
 
-    <script src="script.js"></script>
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5,
+                    speedX: (Math.random() - 0.5) * 0.2,
+                    speedY: (Math.random() - 0.5) * 0.15,
+                    opacity: Math.random() * 0.2
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 122, 255, ${p.opacity})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            createParticles();
+        });
+        resizeCanvas();
+        createParticles();
+        animateParticles();
+
+        // Auth check
+        if (sessionStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        const username = sessionStorage.getItem('username') || 'Dev';
+        const initials = username.substring(0, 2).toUpperCase();
+
+        document.getElementById('headerAvatar').textContent = initials;
+        document.getElementById('sidebarAvatar').textContent = initials;
+        document.getElementById('sidebarName').textContent = username;
+
+        // Toast
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : '●';
+            toast.innerHTML = `<span style="font-weight:600;margin-right:8px">${icon}</span>${message}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Copy function
+        async function copyToClipboard(text, name) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast(`${name} code copied to clipboard!`, 'success');
+            } catch (err) {
+                showToast('Failed to copy', 'error');
+            }
+        }
+
+        // Sidebar
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuBtn.onclick = () => {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        };
+
+        overlay.onclick = () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        };
+
+        // Logout
+        document.getElementById('logoutBtn').onclick = () => {
+            sessionStorage.removeItem('loggedIn');
+            sessionStorage.removeItem('username');
+            showToast('Logged out successfully', 'info');
+            setTimeout(() => { window.location.href = 'login.html'; }, 500);
+        };
+
+        // Featured buttons
+        document.querySelectorAll('.btn-featured-install, .btn-install:not(.disabled)').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const code = btn.dataset.code;
+                const name = btn.dataset.name;
+                if (code && name) {
+                    copyToClipboard(code, name);
+                    showToast(`Install guide: Drag to bookmarks or use copied code`, 'info');
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-featured-copy, .btn-copy:not(.disabled)').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const code = btn.dataset.code;
+                const name = btn.dataset.name;
+                if (code && name) {
+                    copyToClipboard(code, name);
+                }
+            });
+        });
+
+        showToast(`Library loaded`, 'info');
+    </script>
 </body>
 </html>
