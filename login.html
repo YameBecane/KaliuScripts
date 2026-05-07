@@ -12,33 +12,33 @@
     <canvas id="particlesCanvas"></canvas>
 
     <div class="login-overlay">
-        <div class="login-container">
-            <div class="login-icon">
+        <div class="login-card">
+            <div class="login-brand">
                 <i class="fas fa-terminal"></i>
+                <h1>KALIU<span>SCRIPTED</span></h1>
+                <p>educational scripts library</p>
             </div>
-            <h2>KALIU<span>SCRIPTED</span></h2>
-            <p>educational scripts library</p>
             
             <form id="loginForm">
-                <div class="input-group">
+                <div class="input-field">
                     <i class="fas fa-user"></i>
                     <input type="text" id="username" placeholder="Username" autocomplete="off">
                 </div>
-                <div class="input-group">
+                <div class="input-field">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" placeholder="Password">
                 </div>
-                <button type="submit">ACCESS <i class="fas fa-arrow-right"></i></button>
+                <button type="submit" id="loginBtn">ACCESS <i class="fas fa-arrow-right"></i></button>
             </form>
             
-            <div class="social-links">
-                <a href="#" id="discordBtn" class="social-btn"><i class="fab fa-discord"></i></a>
-                <a href="#" id="youtubeBtn" class="social-btn"><i class="fab fa-youtube"></i></a>
+            <div class="login-social">
+                <a href="#" id="discordBtn"><i class="fab fa-discord"></i></a>
+                <a href="#" id="youtubeBtn"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
     </div>
 
-    <div id="notificationContainer" class="notification-container"></div>
+    <div id="toast"></div>
 
     <script src="script.js"></script>
 </body>
