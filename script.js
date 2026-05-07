@@ -88,20 +88,6 @@ window.showNotification = function(title, message, type = 'info', duration = 300
     }, duration);
 };
 
-// Drag and Drop Install Guide
-let dragTimeout;
-function showDragGuide(scriptName) {
-    const guide = document.getElementById('dragGuide');
-    const dragContent = guide.querySelector('.drag-content');
-    dragContent.innerHTML = `<i class="fas fa-star"></i><p>Drag "${scriptName}" to bookmarks bar</p>`;
-    guide.style.display = 'flex';
-    
-    if (dragTimeout) clearTimeout(dragTimeout);
-    dragTimeout = setTimeout(() => {
-        guide.style.display = 'none';
-    }, 4000);
-}
-
 // Copy to Clipboard
 async function copyToClipboard(text, scriptName) {
     try {
@@ -112,10 +98,24 @@ async function copyToClipboard(text, scriptName) {
     }
 }
 
-// Install Button Handler (Drag simulation - shows guide)
+// Show Drag Guide
+let dragTimeout;
+function showDragGuide(scriptName) {
+    const guide = document.getElementById('dragGuide');
+    if (!guide) return;
+    const dragContent = guide.querySelector('.drag-content');
+    dragContent.innerHTML = `<i class="fas fa-star"></i><p>Drag "${scriptName}" to bookmarks bar</p>`;
+    guide.style.display = 'flex';
+    
+    if (dragTimeout) clearTimeout(dragTimeout);
+    dragTimeout = setTimeout(() => {
+        guide.style.display = 'none';
+    }, 4000);
+}
+
+// Handle Install
 function handleInstall(scriptName, code) {
     showDragGuide(scriptName);
-    // Also copy to clipboard as fallback
     copyToClipboard(code, scriptName);
 }
 
@@ -151,8 +151,8 @@ if (loginForm) {
     });
 }
 
-// HOME PAGE
-if (window.location.pathname.includes('home.html')) {
+// HOME & SCRIPTS PAGES
+if (window.location.pathname.includes('home.html') || window.location.pathname.includes('scripts.html')) {
     if (sessionStorage.getItem('loggedIn') !== 'true') {
         window.location.href = 'login.html';
     }
@@ -160,13 +160,14 @@ if (window.location.pathname.includes('home.html')) {
     const username = sessionStorage.getItem('username') || 'Dev';
     const userInitials = username.substring(0, 2).toUpperCase();
     
-    document.getElementById('userAvatar').textContent = userInitials;
-    document.getElementById('userNameDisplay').textContent = username;
-    document.getElementById('welcomeName').textContent = username;
-    
-    setTimeout(() => {
-        window.showNotification('Welcome Back', `Hello ${username}, explore our script library`, 'success', 3000);
-    }, 500);
+    // Update all user elements
+    document.querySelectorAll('#userAvatar, #sidebarAvatar').forEach(el => {
+        if (el) el.textContent = userInitials;
+    });
+    document.querySelectorAll('#userNameDisplay, #sidebarUsername').forEach(el => {
+        if (el) el.textContent = username;
+    });
+    document.getElementById('welcomeName')?.textContent = username;
     
     // Sidebar
     const menuToggle = document.getElementById('menuToggle');
@@ -187,22 +188,6 @@ if (window.location.pathname.includes('home.html')) {
         overlay.classList.remove('active');
     });
     
-    // Tab switching
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = item.dataset.page;
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            item.classList.add('active');
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`${page}Page`).classList.add('active');
-            if (window.innerWidth < 768) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-            }
-        });
-    });
-    
     // Logout
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
         sessionStorage.removeItem('loggedIn');
@@ -211,51 +196,29 @@ if (window.location.pathname.includes('home.html')) {
         setTimeout(() => { window.location.href = 'login.html'; }, 500);
     });
     
-    // Scripts Data
-    const scripts = {
-        'autofarm-master': { name: 'Auto Farm Master', code: "load('autofarm-master')" },
-        'antiban-shield': { name: 'Anti-Ban Shield', code: "load('antiban-shield')" },
-        'speedboost-pro': { name: 'Speed Boost Pro', code: "load('speedboost-pro')" },
-        'esp-viewer': { name: 'ESP Viewer', code: "load('esp-viewer')" },
-        'resource-tracker': { name: 'Resource Tracker', code: "load('resource-tracker')" }
+    // Scripts Store Buttons (Active scripts only)
+    const scriptsData = {
+        'quizizz': { name: 'Wayground Quizizz', code: "load('quizizz-automation')" },
+        'khan': { name: 'Khan Academy Helper', code: "load('khan-academy-helper')" }
     };
     
-    // Featured Script Install
-    const featuredInstallBtn = document.querySelector('.install-btn');
-    const featuredCopyBtn = document.querySelector('.copy-btn');
-    
-    if (featuredInstallBtn) {
-        featuredInstallBtn.addEventListener('click', () => {
-            handleInstall('Auto Farm Master', "load('autofarm-master')");
-        });
-    }
-    
-    if (featuredCopyBtn) {
-        featuredCopyBtn.addEventListener('click', () => {
-            copyToClipboard("load('autofarm-master')", 'Auto Farm Master');
-        });
-    }
-    
-    // Small Scripts Buttons
-    document.querySelectorAll('.install-small').forEach(btn => {
+    document.querySelectorAll('.install-card:not(.disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             const scriptKey = btn.dataset.script;
-            const script = scripts[scriptKey];
-            if (script) {
-                handleInstall(script.name, script.code);
+            if (scriptKey && scriptsData[scriptKey]) {
+                handleInstall(scriptsData[scriptKey].name, scriptsData[scriptKey].code);
             }
         });
     });
     
-    document.querySelectorAll('.copy-small').forEach(btn => {
+    document.querySelectorAll('.copy-card:not(.disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             const scriptKey = btn.dataset.script;
-            const script = scripts[scriptKey];
-            if (script) {
-                copyToClipboard(script.code, script.name);
+            if (scriptKey && scriptsData[scriptKey]) {
+                copyToClipboard(scriptsData[scriptKey].code, scriptsData[scriptKey].name);
             }
         });
     });
 }
 
-console.log('✅ Kaliuscripted v2.0 - No scroll, educational scripts library');
+console.log('✅ Kaliuscripted v2.0 - Scripts Store loaded');
