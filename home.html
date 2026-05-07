@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kaliuscripted | Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <canvas id="particlesCanvas"></canvas>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-left">
+            <button id="menuToggle" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <i class="fas fa-terminal"></i>
+                <span>KALIUSCRIPTED</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">DV</div>
+                <span id="userNameDisplay">Dev</span>
+                <button id="logoutBtn" class="logout-header-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-terminal"></i>
+                <span>MENU</span>
+            </div>
+            <button id="closeSidebar" class="close-sidebar">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" data-page="scripts">
+                <i class="fas fa-code"></i>
+                <span>Scripts</span>
+            </a>
+            <a href="#" class="nav-item" data-page="console">
+                <i class="fas fa-terminal"></i>
+                <span>Console</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settings">
+                <i class="fas fa-sliders-h"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="nav-item" data-page="about">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <div class="welcome-box">
+                <h1>Welcome back, <span id="welcomeName">Dev</span>!</h1>
+                <p>Ready to execute some scripts?</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <h3>24</h3>
+                        <span>Scripts Available</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-play-circle"></i>
+                    <div>
+                        <h3>156</h3>
+                        <span>Executions Today</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <h3>1.2k</h3>
+                        <span>Active Users</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" id="openConsoleFromHome">
+                        <i class="fas fa-terminal"></i> Open Console
+                    </button>
+                    <button class="action-btn" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts Page -->
+        <div id="scriptsPage" class="page">
+            <h2><i class="fas fa-code"></i> Script Library</h2>
+            <div class="scripts-grid">
+                <div class="script-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h4>Auto Farm</h4>
+                        <p>Automatic resource collection</p>
+                        <code>load("autofarm")</code>
+                    </div>
+                    <button class="run-script" data-script="console.log('Auto Farm executed!'); window.showNotification('Auto Farm', 'Started successfully!', 'success');">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                </div>
+                <div class="script-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Anti-Ban</h4>
+                        <p>Bypass detection systems</p>
+                        <code>load("antiban")</code>
+                    </div>
+                    <button class="run-script" data-script="console.log('Anti-Ban activated!'); window.showNotification('Anti-Ban', 'Protection enabled!', 'success');">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                </div>
+                <div class="script-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div>
+                        <h4>Speed Boost</h4>
+                        <p>Increase movement speed</p>
+                        <code>load("speedboost")</code>
+                    </div>
+                    <button class="run-script" data-script="console.log('Speed Boost activated!'); window.showNotification('Speed Boost', 'Movement speed increased!', 'success');">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                </div>
+                <div class="script-card">
+                    <i class="fas fa-eye"></i>
+                    <div>
+                        <h4>ESP Viewer</h4>
+                        <p>See through walls</p>
+                        <code>load("esp")</code>
+                    </div>
+                    <button class="run-script" data-script="console.log('ESP Viewer enabled!'); window.showNotification('ESP Viewer', 'Visual enhancement active!', 'info');">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Console Page -->
+        <div id="consolePage" class="page">
+            <h2><i class="fas fa-terminal"></i> JavaScript Console</h2>
+            <div class="console-area">
+                <div id="consoleOutput" class="console-output">
+                    <div>> Kaliuscripted Console v2.0</div>
+                    <div>> Ready for input</div>
+                </div>
+                <div class="console-input-area">
+                    <span class="prompt">$&gt;</span>
+                    <textarea id="consoleInput" placeholder="// Write your JavaScript code here...&#10;console.log('Hello World!');"></textarea>
+                    <div class="console-actions">
+                        <button id="executeBtn" class="console-execute"><i class="fas fa-play"></i> Execute</button>
+                        <button id="clearConsoleBtn" class="console-clear"><i class="fas fa-trash"></i> Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page">
+            <h2><i class="fas fa-sliders-h"></i> Settings</h2>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <div><i class="fas fa-palette"></i> Dark Mode</div>
+                    <label class="toggle">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div><i class="fas fa-bell"></i> Notifications</div>
+                    <label class="toggle">
+                        <input type="checkbox" id="notifToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div><i class="fas fa-rocket"></i> Auto Execute</div>
+                    <label class="toggle">
+                        <input type="checkbox" id="autoExecToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-group">
+                <h3>Account Info</h3>
+                <p><strong>Username:</strong> <span id="settingsUsername">Dev</span></p>
+                <p><strong>Status:</strong> <span class="badge">Active</span></p>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="aboutPage" class="page">
+            <h2><i class="fas fa-info-circle"></i> About</h2>
+            <div class="about-content">
+                <i class="fas fa-terminal about-icon"></i>
+                <h3>Kaliuscripted v2.0</h3>
+                <p>Modern IMGUI-style menu for script management and execution.</p>
+                <div class="about-links">
+                    <a href="#" class="about-link" id="aboutDiscord"><i class="fab fa-discord"></i> Discord</a>
+                    <a href="#" class="about-link" id="aboutYoutube"><i class="fab fa-youtube"></i> YouTube</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
