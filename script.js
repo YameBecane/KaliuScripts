@@ -10,8 +10,8 @@ if (canvas) {
             this.x = Math.random() * window.innerWidth;
             this.y = Math.random() * window.innerHeight;
             this.size = Math.random() * 2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.speedY = (Math.random() - 0.5) * 0.2;
+            this.speedX = (Math.random() - 0.5) * 0.2;
+            this.speedY = (Math.random() - 0.5) * 0.15;
             this.opacity = Math.random() * 0.3 + 0.1;
         }
         update() {
@@ -55,7 +55,7 @@ if (canvas) {
 // Notification System
 const notificationContainer = document.getElementById('notificationContainer');
 
-window.showNotification = function(title, message, type = 'info', duration = 4000) {
+window.showNotification = function(title, message, type = 'info', duration = 3000) {
     if (!notificationContainer) return;
     
     const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
@@ -87,6 +87,37 @@ window.showNotification = function(title, message, type = 'info', duration = 400
         }
     }, duration);
 };
+
+// Drag and Drop Install Guide
+let dragTimeout;
+function showDragGuide(scriptName) {
+    const guide = document.getElementById('dragGuide');
+    const dragContent = guide.querySelector('.drag-content');
+    dragContent.innerHTML = `<i class="fas fa-star"></i><p>Drag "${scriptName}" to bookmarks bar</p>`;
+    guide.style.display = 'flex';
+    
+    if (dragTimeout) clearTimeout(dragTimeout);
+    dragTimeout = setTimeout(() => {
+        guide.style.display = 'none';
+    }, 4000);
+}
+
+// Copy to Clipboard
+async function copyToClipboard(text, scriptName) {
+    try {
+        await navigator.clipboard.writeText(text);
+        window.showNotification('Copied!', `${scriptName} code copied to clipboard`, 'success', 2000);
+    } catch (err) {
+        window.showNotification('Error', 'Failed to copy', 'error', 2000);
+    }
+}
+
+// Install Button Handler (Drag simulation - shows guide)
+function handleInstall(scriptName, code) {
+    showDragGuide(scriptName);
+    // Also copy to clipboard as fallback
+    copyToClipboard(code, scriptName);
+}
 
 // LOGIN PAGE
 const loginForm = document.getElementById('loginForm');
@@ -132,10 +163,9 @@ if (window.location.pathname.includes('home.html')) {
     document.getElementById('userAvatar').textContent = userInitials;
     document.getElementById('userNameDisplay').textContent = username;
     document.getElementById('welcomeName').textContent = username;
-    document.getElementById('settingsUsername').textContent = username;
     
     setTimeout(() => {
-        window.showNotification('Welcome Back', `Hello ${username}, ready to execute scripts?`, 'success', 3000);
+        window.showNotification('Welcome Back', `Hello ${username}, explore our script library`, 'success', 3000);
     }, 500);
     
     // Sidebar
@@ -181,105 +211,51 @@ if (window.location.pathname.includes('home.html')) {
         setTimeout(() => { window.location.href = 'login.html'; }, 500);
     });
     
-    // Console
-    const consoleOutput = document.getElementById('consoleOutput');
-    const consoleInput = document.getElementById('consoleInput');
+    // Scripts Data
+    const scripts = {
+        'autofarm-master': { name: 'Auto Farm Master', code: "load('autofarm-master')" },
+        'antiban-shield': { name: 'Anti-Ban Shield', code: "load('antiban-shield')" },
+        'speedboost-pro': { name: 'Speed Boost Pro', code: "load('speedboost-pro')" },
+        'esp-viewer': { name: 'ESP Viewer', code: "load('esp-viewer')" },
+        'resource-tracker': { name: 'Resource Tracker', code: "load('resource-tracker')" }
+    };
     
-    function addConsoleLine(message, type = 'output') {
-        if (!consoleOutput) return;
-        const line = document.createElement('div');
-        line.style.color = type === 'error' ? '#ef4444' : type === 'success' ? '#4ade80' : '#a78bfa';
-        line.innerHTML = `> ${message}`;
-        consoleOutput.appendChild(line);
-        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    // Featured Script Install
+    const featuredInstallBtn = document.querySelector('.install-btn');
+    const featuredCopyBtn = document.querySelector('.copy-btn');
+    
+    if (featuredInstallBtn) {
+        featuredInstallBtn.addEventListener('click', () => {
+            handleInstall('Auto Farm Master', "load('autofarm-master')");
+        });
     }
     
-    document.getElementById('executeBtn')?.addEventListener('click', () => {
-        const script = consoleInput.value;
-        let outputBuffer = [];
-        const originalLog = console.log;
-        const originalError = console.error;
-        
-        console.log = (...args) => {
-            const message = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ');
-            outputBuffer.push(message);
-            originalLog.apply(console, args);
-        };
-        console.error = (...args) => {
-            outputBuffer.push(`ERROR: ${args.map(String).join(' ')}`);
-            originalError.apply(console, args);
-        };
-        
-        try {
-            new Function(script)();
-            if (outputBuffer.length) outputBuffer.forEach(msg => addConsoleLine(msg, 'success'));
-            else addConsoleLine('Script executed successfully (no output)', 'success');
-            window.showNotification('Script Executed', 'Your script ran successfully!', 'success', 2000);
-        } catch (error) {
-            addConsoleLine(`Error: ${error.message}`, 'error');
-            window.showNotification('Script Error', error.message, 'error', 3000);
-        }
-        
-        console.log = originalLog;
-        console.error = originalError;
-    });
+    if (featuredCopyBtn) {
+        featuredCopyBtn.addEventListener('click', () => {
+            copyToClipboard("load('autofarm-master')", 'Auto Farm Master');
+        });
+    }
     
-    document.getElementById('clearConsoleBtn')?.addEventListener('click', () => {
-        if (consoleOutput) consoleOutput.innerHTML = '<div>> Console cleared</div>';
-    });
-    
-    // Run scripts from library
-    document.querySelectorAll('.run-script').forEach(btn => {
+    // Small Scripts Buttons
+    document.querySelectorAll('.install-small').forEach(btn => {
         btn.addEventListener('click', () => {
-            const script = btn.dataset.script;
+            const scriptKey = btn.dataset.script;
+            const script = scripts[scriptKey];
             if (script) {
-                try {
-                    new Function(script)();
-                    document.querySelector('.nav-item[data-page="console"]').click();
-                    addConsoleLine(`Executed: ${btn.closest('.script-card')?.querySelector('h4')?.textContent || 'Script'}`, 'success');
-                } catch (error) {
-                    window.showNotification('Execution Error', error.message, 'error');
-                }
+                handleInstall(script.name, script.code);
             }
         });
     });
     
-    document.getElementById('openConsoleFromHome')?.addEventListener('click', () => {
-        document.querySelector('.nav-item[data-page="console"]').click();
-    });
-    
-    document.getElementById('refreshBtn')?.addEventListener('click', () => {
-        window.showNotification('Refreshed', 'Page content updated', 'info', 1500);
-    });
-    
-    // Settings
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const notifToggle = document.getElementById('notifToggle');
-    
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('change', (e) => {
-            document.body.style.background = e.target.checked ? '#1a1a2e' : '#0a0a0f';
-            localStorage.setItem('darkMode', e.target.checked);
+    document.querySelectorAll('.copy-small').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const scriptKey = btn.dataset.script;
+            const script = scripts[scriptKey];
+            if (script) {
+                copyToClipboard(script.code, script.name);
+            }
         });
-        darkModeToggle.checked = localStorage.getItem('darkMode') === 'true';
-        if (darkModeToggle.checked) document.body.style.background = '#1a1a2e';
-    }
-    
-    if (notifToggle) {
-        notifToggle.addEventListener('change', (e) => {
-            localStorage.setItem('notificationsEnabled', e.target.checked);
-        });
-        notifToggle.checked = localStorage.getItem('notificationsEnabled') !== 'false';
-    }
-    
-    document.getElementById('aboutDiscord')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.open('https://discord.gg/kaliuscripted', '_blank');
-    });
-    document.getElementById('aboutYoutube')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.open('https://youtube.com/@kaliuscripted', '_blank');
     });
 }
 
-console.log('✅ Kaliuscripted loaded');
+console.log('✅ Kaliuscripted v2.0 - No scroll, educational scripts library');
