@@ -3,16 +3,16 @@ const canvas = document.getElementById('particlesCanvas');
 const ctx = canvas.getContext('2d');
 
 let particles = [];
-const PARTICLE_COUNT = 80;
+const PARTICLE_COUNT = 60;
 
 class Particle {
     constructor() {
         this.x = Math.random() * window.innerWidth;
         this.y = Math.random() * window.innerHeight;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.3;
-        this.opacity = Math.random() * 0.5 + 0.2;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.2;
+        this.opacity = Math.random() * 0.3 + 0.1;
     }
     
     update() {
@@ -28,7 +28,7 @@ class Particle {
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 255, 255, ${this.opacity})`;
+        ctx.fillStyle = `rgba(167, 139, 250, ${this.opacity})`;
         ctx.fill();
     }
 }
@@ -59,241 +59,241 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 animateParticles();
 
-// ========== LOGIN SYSTEM (FIXED CREDENTIALS) ==========
+// ========== LOGIN SYSTEM ==========
 const FIXED_USERNAME = "Dev";
 const FIXED_PASSWORD = "86271415";
 
-const loginScreen = document.getElementById('loginScreen');
-const mainApp = document.getElementById('mainApp');
+const loginOverlay = document.getElementById('loginOverlay');
+const mainMenu = document.getElementById('mainMenu');
 const loginForm = document.getElementById('loginForm');
-const welcomeUserSpan = document.getElementById('welcomeUser');
-const userInitialsBadge = document.getElementById('userInitialsBadge');
+
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toastNotification');
+    toast.innerHTML = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value;
     
     if (username === FIXED_USERNAME && password === FIXED_PASSWORD) {
-        // Login successful
-        loginScreen.style.display = 'none';
-        mainApp.style.display = 'block';
+        loginOverlay.style.display = 'none';
+        mainMenu.style.display = 'flex';
         
-        // Update user info
-        welcomeUserSpan.textContent = username;
-        const initials = username.substring(0, 2).toUpperCase();
-        userInitialsBadge.textContent = initials;
+        // Update user displays
+        const userInitials = username.substring(0, 2).toUpperCase();
+        document.getElementById('userBadge').textContent = userInitials;
+        document.getElementById('userNameDisplay').textContent = username;
+        document.getElementById('welcomeUserSpan').textContent = username;
+        document.getElementById('settingsUsername').textContent = username;
         
-        // Store session
         sessionStorage.setItem('loggedIn', 'true');
         sessionStorage.setItem('username', username);
         
-        // Small animation effect
-        document.body.style.background = '#050505';
+        showToast('✅ Login successful! Welcome back.', 'success');
     } else {
-        // Error effect
-        const inputs = document.querySelectorAll('.input-field');
-        inputs.forEach(input => {
-            input.style.borderColor = '#ff4444';
-            input.style.boxShadow = '0 0 10px rgba(255, 68, 68, 0.3)';
-        });
-        
-        setTimeout(() => {
-            inputs.forEach(input => {
-                input.style.borderColor = 'rgba(0, 255, 255, 0.2)';
-                input.style.boxShadow = 'none';
-            });
-        }, 1000);
-        
-        // Clear password
-        document.getElementById('password').value = '';
+        showToast('❌ Invalid credentials. Try: Dev / 86271415', 'error');
+        document.getElementById('loginPass').value = '';
     }
 });
 
-// Check if already logged in
+// Check session
 if (sessionStorage.getItem('loggedIn') === 'true') {
-    loginScreen.style.display = 'none';
-    mainApp.style.display = 'block';
+    loginOverlay.style.display = 'none';
+    mainMenu.style.display = 'flex';
     const username = sessionStorage.getItem('username') || 'Dev';
-    welcomeUserSpan.textContent = username;
-    userInitialsBadge.textContent = username.substring(0, 2).toUpperCase();
+    const userInitials = username.substring(0, 2).toUpperCase();
+    document.getElementById('userBadge').textContent = userInitials;
+    document.getElementById('userNameDisplay').textContent = username;
+    document.getElementById('welcomeUserSpan').textContent = username;
+    document.getElementById('settingsUsername').textContent = username;
 }
 
 // ========== SOCIAL BUTTONS ==========
-document.getElementById('discordBtn')?.addEventListener('click', (e) => {
+document.getElementById('discordLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     window.open('https://discord.gg/kaliuscripted', '_blank');
 });
 
-document.getElementById('youtubeBtn')?.addEventListener('click', (e) => {
+document.getElementById('youtubeLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     window.open('https://youtube.com/@kaliuscripted', '_blank');
 });
 
-// ========== SIDEBAR CONTROLS ==========
-const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
-const closeSidebar = document.getElementById('closeSidebar');
-const overlay = document.getElementById('overlay');
-
-menuToggle?.addEventListener('click', () => {
-    sidebar.classList.add('open');
-    overlay.classList.add('active');
-});
-
-closeSidebar?.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('active');
-});
-
-overlay?.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('active');
-});
-
-// ========== PAGE NAVIGATION ==========
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const page = link.dataset.page;
+// ========== TAB SWITCHING ==========
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
         
-        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-        link.classList.add('active');
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(`${page}Page`).classList.add('active');
-        
-        // Close sidebar on mobile
-        if (window.innerWidth < 768) {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-        }
+        // Update active panel
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        document.getElementById(`${tabId}Tab`).classList.add('active');
     });
 });
 
 // ========== LOGOUT ==========
-document.getElementById('logoutBtn')?.addEventListener('click', () => {
+function logout() {
     sessionStorage.removeItem('loggedIn');
     sessionStorage.removeItem('username');
-    mainApp.style.display = 'none';
-    loginScreen.style.display = 'flex';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-});
+    mainMenu.style.display = 'none';
+    loginOverlay.style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    showToast('👋 Logged out successfully', 'info');
+}
 
-// ========== CONSOLE MODAL ==========
-const scriptsConsoleBtn = document.getElementById('scriptsConsoleBtn');
-const consoleModal = document.getElementById('consoleModal');
-const consoleClose = document.querySelector('.console-close');
+document.getElementById('logoutMainBtn')?.addEventListener('click', logout);
+document.querySelector('.logout-icon')?.addEventListener('click', logout);
 
-scriptsConsoleBtn?.addEventListener('click', () => {
-    consoleModal.style.display = 'flex';
-});
+// ========== CONSOLE FUNCTIONS ==========
+const consoleOutput = document.getElementById('consoleOutputArea');
+const consoleInput = document.getElementById('consoleInputArea');
 
-consoleClose?.addEventListener('click', () => {
-    consoleModal.style.display = 'none';
-});
+function addConsoleLine(message, type = 'output') {
+    const line = document.createElement('div');
+    line.className = 'console-line';
+    const color = type === 'error' ? '#ef4444' : type === 'success' ? '#4ade80' : '#a78bfa';
+    line.style.color = color;
+    line.innerHTML = `> ${message}`;
+    consoleOutput.appendChild(line);
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
 
-window.addEventListener('click', (e) => {
-    if (e.target === consoleModal) {
-        consoleModal.style.display = 'none';
-    }
-});
-
-// ========== SCRIPT EXECUTION ==========
-const runScriptBtn = document.getElementById('runScriptBtn');
-const saveScriptBtn = document.getElementById('saveScriptBtn');
-const clearConsoleBtn = document.getElementById('clearConsoleBtn');
-const consoleInput = document.getElementById('consoleInput');
-const consoleOutput = document.getElementById('consoleOutput');
-
-runScriptBtn?.addEventListener('click', () => {
+// Execute script
+document.getElementById('executeScriptBtn')?.addEventListener('click', () => {
     const script = consoleInput.value;
-    let outputText = '';
+    let outputBuffer = [];
     
-    // Override console.log temporarily
+    // Override console.log
     const originalLog = console.log;
+    const originalError = console.error;
+    
     console.log = (...args) => {
-        outputText += args.map(arg => {
+        const message = args.map(arg => {
             if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
             return String(arg);
-        }).join(' ') + '\n';
+        }).join(' ');
+        outputBuffer.push(message);
         originalLog.apply(console, args);
+    };
+    
+    console.error = (...args) => {
+        const message = args.map(arg => String(arg)).join(' ');
+        outputBuffer.push(`ERROR: ${message}`);
+        originalError.apply(console, args);
     };
     
     try {
         const func = new Function(script);
         func();
-        consoleOutput.innerHTML = `<span style="color:#0f0">✓ Script executed successfully</span>\n${outputText || 'No output'}`;
+        
+        if (outputBuffer.length > 0) {
+            outputBuffer.forEach(msg => addConsoleLine(msg, 'success'));
+        } else {
+            addConsoleLine('Script executed successfully (no output)', 'success');
+        }
     } catch (error) {
-        consoleOutput.innerHTML = `<span style="color:#f00">✗ Error: ${error.message}</span>`;
+        addConsoleLine(`Error: ${error.message}`, 'error');
     }
     
     console.log = originalLog;
+    console.error = originalError;
 });
 
-saveScriptBtn?.addEventListener('click', () => {
-    const script = consoleInput.value;
-    localStorage.setItem('savedScript', script);
-    consoleOutput.innerHTML = '<span style="color:#0f0">✓ Script saved to localStorage!</span>';
-    
-    setTimeout(() => {
-        if (consoleOutput.innerHTML.includes('saved')) {
-            setTimeout(() => {
-                if (consoleOutput.innerHTML.includes('saved')) {
-                    consoleOutput.innerHTML = '';
-                }
-            }, 2000);
+// Clear console
+document.getElementById('clearConsoleBtn')?.addEventListener('click', () => {
+    consoleOutput.innerHTML = '<div class="console-line">> Console cleared</div>';
+});
+
+// Initial console message
+addConsoleLine('Kaliuscripted Console v2.0 ready');
+addConsoleLine('Type JavaScript code and click Execute');
+
+// ========== RUN SCRIPTS FROM LIBRARY ==========
+document.querySelectorAll('.run-script-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const script = btn.dataset.script;
+        if (script) {
+            try {
+                const func = new Function(script);
+                func();
+                showToast('✅ Script executed successfully!', 'success');
+                
+                // Switch to console tab to show output
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="console"]').classList.add('active');
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('consoleTab').classList.add('active');
+                
+                addConsoleLine(`Executed: ${btn.closest('.script-item')?.querySelector('h4')?.textContent || 'Script'}`, 'success');
+            } catch (error) {
+                showToast(`❌ Error: ${error.message}`, 'error');
+                addConsoleLine(`Error: ${error.message}`, 'error');
+            }
         }
-    }, 2000);
+    });
 });
 
-clearConsoleBtn?.addEventListener('click', () => {
-    consoleInput.value = '';
-    consoleOutput.innerHTML = '';
+// ========== SETTINGS TOGGLES ==========
+// Theme toggle
+document.getElementById('themeToggle')?.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        document.body.style.background = '#1a1a2e';
+        showToast('🌙 Dark theme applied', 'info');
+    } else {
+        document.body.style.background = '#0a0a0f';
+        showToast('☀️ Light theme applied', 'info');
+    }
+    localStorage.setItem('themeDark', e.target.checked);
 });
 
-// Load saved script
-const savedScript = localStorage.getItem('savedScript');
-if (savedScript && consoleInput) {
-    consoleInput.value = savedScript;
+// Load theme preference
+const savedTheme = localStorage.getItem('themeDark') === 'true';
+if (savedTheme && document.getElementById('themeToggle')) {
+    document.getElementById('themeToggle').checked = true;
+    document.body.style.background = '#1a1a2e';
 }
 
-// ========== ADDITIONAL UI FEATURES ==========
-// Open console from dashboard button
-document.querySelectorAll('.open-console').forEach(btn => {
-    btn.addEventListener('click', () => {
-        consoleModal.style.display = 'flex';
-    });
+// Notifications toggle
+document.getElementById('notifToggle')?.addEventListener('change', (e) => {
+    localStorage.setItem('notificationsEnabled', e.target.checked);
+    showToast(e.target.checked ? '🔔 Notifications enabled' : '🔕 Notifications disabled', 'info');
 });
 
-// Navigate to cheats
-document.querySelectorAll('.nav-cheats').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-        document.querySelector('.nav-link[data-page="cheats"]').classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('cheatsPage').classList.add('active');
-        
-        if (window.innerWidth < 768) {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
+// Auto-execute toggle
+document.getElementById('autoExecToggle')?.addEventListener('change', (e) => {
+    localStorage.setItem('autoExecute', e.target.checked);
+    showToast(e.target.checked ? '⚡ Auto-execute enabled' : '⚡ Auto-execute disabled', 'info');
+});
+
+// ========== OPEN CONSOLE FROM HOME TAB ==========
+window.addEventListener('openConsole', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.tab-btn[data-tab="console"]').classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('consoleTab').classList.add('active');
+});
+
+// ========== ABOUT SOCIAL LINKS ==========
+document.querySelectorAll('.about-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href && href !== '#') {
+            window.open(href, '_blank');
+        } else {
+            showToast('Link coming soon!', 'info');
         }
     });
 });
 
-// Cheat activation buttons
-document.querySelectorAll('.cheat-activate').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const cheatName = btn.closest('.cheat-item')?.querySelector('h4')?.textContent || 'Cheat';
-        consoleOutput.innerHTML = `<span style="color:#0f0">✓ ${cheatName} activated successfully!</span>`;
-        setTimeout(() => {
-            if (consoleOutput.innerHTML.includes('activated')) {
-                consoleOutput.innerHTML = '';
-            }
-        }, 3000);
-    });
-});
-
-console.log('✅ Kaliuscripted loaded - Cyberpunk theme active');
+console.log('✅ Kaliuscripted IMGUI Menu loaded');
