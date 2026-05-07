@@ -11,205 +11,208 @@
 
     <canvas id="particlesCanvas"></canvas>
 
-    <header class="main-header">
-        <button id="menuToggle" class="menu-btn">
+    <!-- Header -->
+    <div class="app-header">
+        <button id="menuBtn" class="menu-button">
             <i class="fas fa-bars"></i>
         </button>
-        <div class="logo">
+        <div class="app-logo">
             <i class="fas fa-terminal"></i>
             <span>KALIUSCRIPTED</span>
         </div>
-        <div class="header-right">
-            <div class="user-badge-mini">
-                <span id="userInitialsMini">DV</span>
-                <button id="logoutMiniBtn" class="logout-icon-mini">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
+        <div class="app-user">
+            <div class="user-avatar" id="headerAvatar">DV</div>
+            <button id="logoutHeaderBtn" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
-    </header>
+    </div>
 
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">
                 <i class="fas fa-cube"></i>
                 <span>MENU</span>
+                <button id="closeSidebarBtn" class="sidebar-close">&times;</button>
             </div>
-            <button id="closeSidebar" class="close-sidebar">&times;</button>
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="library.html" class="nav-link active">
+                    <i class="fas fa-book"></i>
+                    <span>Library</span>
+                </a>
+            </nav>
         </div>
-        <nav class="sidebar-nav">
-            <a href="home.html" class="nav-item">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="library.html" class="nav-item active">
-                <i class="fas fa-book-open"></i>
-                <span>Library</span>
-            </a>
-        </nav>
-        <div class="sidebar-user-footer">
-            <div class="user-avatar-footer" id="sidebarAvatarFooter">DV</div>
-            <div class="user-info-footer">
-                <span class="user-name-footer" id="sidebarUsernameFooter">Dev</span>
-                <span class="user-status-footer">Online</span>
+        <div class="sidebar-user">
+            <div class="user-avatar-lg" id="sidebarAvatar">DV</div>
+            <div class="user-details">
+                <span class="user-name" id="sidebarName">Dev</span>
+                <span class="user-status">● Online</span>
             </div>
         </div>
-    </aside>
+    </div>
 
     <div id="overlay" class="overlay"></div>
 
-    <main class="main-content">
-        <div id="libraryPage" class="page active fade-in">
-            <div class="library-header">
-                <h2><i class="fas fa-book-open"></i> Script Library</h2>
-                <p>Browse our collection of educational automation scripts</p>
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="page-header">
+            <h2><i class="fas fa-book"></i> Script Library</h2>
+            <p>Browse and install automation scripts</p>
+        </div>
+
+        <div class="scripts-container">
+            <!-- Script 1 - ACTIVE -->
+            <div class="script-card">
+                <div class="script-icon">
+                    <i class="fas fa-gamepad"></i>
+                    <span class="status active-status">● Active</span>
+                </div>
+                <div class="script-details">
+                    <h3>Wayground Quizizz</h3>
+                    <p>Auto-answer questions, reveal correct answers, and bypass timers on Quizizz.</p>
+                    <div class="script-meta">
+                        <span class="version">v2.1.0</span>
+                        <span class="category">Quiz Automation</span>
+                    </div>
+                </div>
+                <div class="script-actions">
+                    <button class="btn-install" data-script="quizizz" data-code="load('quizizz-automation')" data-name="Wayground Quizizz">
+                        <i class="fas fa-download"></i> Install
+                    </button>
+                    <button class="btn-copy" data-code="load('quizizz-automation')" data-name="Wayground Quizizz">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
             </div>
 
-            <div class="scripts-grid">
-                <!-- Wayground Quizizz - ATIVO -->
-                <div class="script-card-item active">
-                    <div class="card-image-area">
-                        <i class="fas fa-gamepad"></i>
-                        <div class="status-chip active-chip">
-                            <i class="fas fa-circle"></i> Active
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Wayground Quizizz</h3>
-                        <p>Auto-answer questions, reveal correct answers, and bypass timers on Quizizz platform.</p>
-                        <div class="card-meta">
-                            <span class="version">v2.1.0</span>
-                            <span class="category">Quiz Automation</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install" data-script="quizizz">
-                                <i class="fas fa-download"></i> Install
-                            </button>
-                            <button class="btn-copy" data-code="load('quizizz-automation')">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
+            <!-- Script 2 - ACTIVE -->
+            <div class="script-card">
+                <div class="script-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="status active-status">● Active</span>
+                </div>
+                <div class="script-details">
+                    <h3>Khan Academy Helper</h3>
+                    <p>Reveal answers, auto-complete exercises, and unlock mastery challenges.</p>
+                    <div class="script-meta">
+                        <span class="version">v1.8.2</span>
+                        <span class="category">Learning Platform</span>
                     </div>
                 </div>
+                <div class="script-actions">
+                    <button class="btn-install" data-script="khan" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
+                        <i class="fas fa-download"></i> Install
+                    </button>
+                    <button class="btn-copy" data-code="load('khan-academy-helper')" data-name="Khan Academy Helper">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
 
-                <!-- Khan Academy - ATIVO -->
-                <div class="script-card-item active">
-                    <div class="card-image-area">
-                        <i class="fas fa-graduation-cap"></i>
-                        <div class="status-chip active-chip">
-                            <i class="fas fa-circle"></i> Active
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Khan Academy Helper</h3>
-                        <p>Reveal answers, auto-complete exercises, and unlock mastery challenges on Khan Academy.</p>
-                        <div class="card-meta">
-                            <span class="version">v1.8.2</span>
-                            <span class="category">Learning Platform</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install" data-script="khan">
-                                <i class="fas fa-download"></i> Install
-                            </button>
-                            <button class="btn-copy" data-code="load('khan-academy-helper')">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
+            <!-- Script 3 - INACTIVE -->
+            <div class="script-card inactive">
+                <div class="script-icon">
+                    <i class="fas fa-book"></i>
+                    <span class="status inactive-status">● Inactive</span>
+                </div>
+                <div class="script-details">
+                    <h3>Leia Paraná</h3>
+                    <p>Reading comprehension automation with answer extraction.</p>
+                    <div class="script-meta">
+                        <span class="version">v1.2.0</span>
+                        <span class="category">Reading Platform</span>
                     </div>
                 </div>
+                <div class="script-actions">
+                    <button class="btn-install disabled" disabled>
+                        <i class="fas fa-download"></i> Unavailable
+                    </button>
+                    <button class="btn-copy disabled" disabled>
+                        <i class="fas fa-copy"></i> Locked
+                    </button>
+                </div>
+            </div>
 
-                <!-- Leia Paraná - INATIVO -->
-                <div class="script-card-item inactive">
-                    <div class="card-image-area">
-                        <i class="fas fa-book"></i>
-                        <div class="status-chip inactive-chip">
-                            <i class="fas fa-circle"></i> Inactive
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Leia Paraná</h3>
-                        <p>Reading comprehension automation for Leia Paraná platform.</p>
-                        <div class="card-meta">
-                            <span class="version">v1.2.0</span>
-                            <span class="category">Reading Platform</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install disabled" disabled>Unavailable</button>
-                            <button class="btn-copy disabled" disabled>Locked</button>
-                        </div>
+            <!-- Script 4 - INACTIVE -->
+            <div class="script-card inactive">
+                <div class="script-icon">
+                    <i class="fas fa-pen-fancy"></i>
+                    <span class="status inactive-status">● Inactive</span>
+                </div>
+                <div class="script-details">
+                    <h3>Redação Paraná</h3>
+                    <p>Essay writing assistant with grammar checking.</p>
+                    <div class="script-meta">
+                        <span class="version">v1.0.5</span>
+                        <span class="category">Writing Platform</span>
                     </div>
                 </div>
+                <div class="script-actions">
+                    <button class="btn-install disabled" disabled>
+                        <i class="fas fa-download"></i> Unavailable
+                    </button>
+                    <button class="btn-copy disabled" disabled>
+                        <i class="fas fa-copy"></i> Locked
+                    </button>
+                </div>
+            </div>
 
-                <!-- Redação Paraná - INATIVO -->
-                <div class="script-card-item inactive">
-                    <div class="card-image-area">
-                        <i class="fas fa-pen-fancy"></i>
-                        <div class="status-chip inactive-chip">
-                            <i class="fas fa-circle"></i> Inactive
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Redação Paraná</h3>
-                        <p>Essay writing assistant with grammar checking.</p>
-                        <div class="card-meta">
-                            <span class="version">v1.0.5</span>
-                            <span class="category">Writing Platform</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install disabled" disabled>Unavailable</button>
-                            <button class="btn-copy disabled" disabled>Locked</button>
-                        </div>
+            <!-- Script 5 - INACTIVE -->
+            <div class="script-card inactive">
+                <div class="script-icon">
+                    <i class="fas fa-laptop-code"></i>
+                    <span class="status inactive-status">● Inactive</span>
+                </div>
+                <div class="script-details">
+                    <h3>Alura Course Helper</h3>
+                    <p>Course completion automation with video tracking.</p>
+                    <div class="script-meta">
+                        <span class="version">v2.0.0</span>
+                        <span class="category">Course Platform</span>
                     </div>
                 </div>
+                <div class="script-actions">
+                    <button class="btn-install disabled" disabled>
+                        <i class="fas fa-download"></i> Unavailable
+                    </button>
+                    <button class="btn-copy disabled" disabled>
+                        <i class="fas fa-copy"></i> Locked
+                    </button>
+                </div>
+            </div>
 
-                <!-- Alura - INATIVO -->
-                <div class="script-card-item inactive">
-                    <div class="card-image-area">
-                        <i class="fas fa-laptop-code"></i>
-                        <div class="status-chip inactive-chip">
-                            <i class="fas fa-circle"></i> Inactive
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Alura Course Helper</h3>
-                        <p>Course completion automation with video tracking.</p>
-                        <div class="card-meta">
-                            <span class="version">v2.0.0</span>
-                            <span class="category">Course Platform</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install disabled" disabled>Unavailable</button>
-                            <button class="btn-copy disabled" disabled>Locked</button>
-                        </div>
+            <!-- Script 6 - INACTIVE -->
+            <div class="script-card inactive">
+                <div class="script-icon">
+                    <i class="fas fa-language"></i>
+                    <span class="status inactive-status">● Inactive</span>
+                </div>
+                <div class="script-details">
+                    <h3>Inglês Paraná</h3>
+                    <p>Language learning automation with translation assistance.</p>
+                    <div class="script-meta">
+                        <span class="version">v1.3.0</span>
+                        <span class="category">Language Platform</span>
                     </div>
                 </div>
-
-                <!-- Inglês Paraná - INATIVO -->
-                <div class="script-card-item inactive">
-                    <div class="card-image-area">
-                        <i class="fas fa-language"></i>
-                        <div class="status-chip inactive-chip">
-                            <i class="fas fa-circle"></i> Inactive
-                        </div>
-                    </div>
-                    <div class="card-info-area">
-                        <h3>Inglês Paraná</h3>
-                        <p>Language learning automation with translation assistance.</p>
-                        <div class="card-meta">
-                            <span class="version">v1.3.0</span>
-                            <span class="category">Language Platform</span>
-                        </div>
-                        <div class="card-buttons">
-                            <button class="btn-install disabled" disabled>Unavailable</button>
-                            <button class="btn-copy disabled" disabled>Locked</button>
-                        </div>
-                    </div>
+                <div class="script-actions">
+                    <button class="btn-install disabled" disabled>
+                        <i class="fas fa-download"></i> Unavailable
+                    </button>
+                    <button class="btn-copy disabled" disabled>
+                        <i class="fas fa-copy"></i> Locked
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="notificationContainer" class="notification-container"></div>
+    <div id="toast"></div>
 
     <script src="script.js"></script>
 </body>
