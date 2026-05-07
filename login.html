@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kaliuscripted | Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <canvas id="particlesCanvas"></canvas>
+
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-icon">
+                <i class="fas fa-terminal"></i>
+            </div>
+            <h2>KALIU<span>SCRIPTED</span></h2>
+            <p>enter credentials to continue</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" placeholder="Username" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password">
+                </div>
+                <button type="submit">ACCESS <i class="fas fa-arrow-right"></i></button>
+            </form>
+            
+            <div class="social-links">
+                <a href="#" id="discordBtn" class="social-btn"><i class="fab fa-discord"></i></a>
+                <a href="#" id="youtubeBtn" class="social-btn"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
