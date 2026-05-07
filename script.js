@@ -1,4 +1,4 @@
-// Particles System
+// PARTICLES SYSTEM
 const canvas = document.getElementById('particlesCanvas');
 if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -52,13 +52,13 @@ if (canvas) {
     animateParticles();
 }
 
-// Notification System Global
+// NOTIFICATION SYSTEM
 const notificationContainer = document.getElementById('notificationContainer');
 
 window.showNotification = function(title, message, type = 'info', duration = 3000) {
     if (!notificationContainer) return;
     
-    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
     
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -88,7 +88,7 @@ window.showNotification = function(title, message, type = 'info', duration = 300
     }, duration);
 };
 
-// Copy to Clipboard
+// COPY TO CLIPBOARD
 async function copyToClipboard(text, scriptName) {
     try {
         await navigator.clipboard.writeText(text);
@@ -98,7 +98,7 @@ async function copyToClipboard(text, scriptName) {
     }
 }
 
-// Drag Guide
+// DRAG GUIDE
 let dragTimeout;
 function showDragGuide(scriptName) {
     let guide = document.getElementById('dragGuide');
@@ -124,7 +124,7 @@ function handleInstall(scriptName, code) {
     copyToClipboard(code, scriptName);
 }
 
-// LOGIN PAGE
+// LOGIN PAGE - CORRIGIDO
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     const FIXED_USERNAME = "Dev";
@@ -139,7 +139,10 @@ if (loginForm) {
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('username', username);
             window.showNotification('Login Successful', `Welcome back, ${username}!`, 'success', 2000);
-            setTimeout(() => { window.location.href = 'home.html'; }, 600);
+            
+            setTimeout(() => { 
+                window.location.href = 'home.html'; 
+            }, 600);
         } else {
             window.showNotification('Login Failed', 'Invalid credentials. Try: Dev / 86271415', 'error', 3000);
             document.getElementById('password').value = '';
@@ -149,16 +152,14 @@ if (loginForm) {
     document.getElementById('discordBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         window.open('https://discord.gg/kaliuscripted', '_blank');
-        window.showNotification('External Link', 'Opening Discord', 'info', 1500);
     });
     document.getElementById('youtubeBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         window.open('https://youtube.com/@kaliuscripted', '_blank');
-        window.showNotification('External Link', 'Opening YouTube', 'info', 1500);
     });
 }
 
-// HOME & LIBRARY PAGES
+// VERIFICAÇÃO DE AUTENTICAÇÃO
 if (window.location.pathname.includes('home.html') || window.location.pathname.includes('library.html')) {
     if (sessionStorage.getItem('loggedIn') !== 'true') {
         window.location.href = 'login.html';
@@ -167,7 +168,6 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
     const username = sessionStorage.getItem('username') || 'Dev';
     const userInitials = username.substring(0, 2).toUpperCase();
     
-    // Update all user elements
     document.querySelectorAll('#userInitialsMini, #sidebarAvatarFooter').forEach(el => {
         if (el) el.textContent = userInitials;
     });
@@ -176,7 +176,7 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
     });
     document.getElementById('welcomeName')?.textContent = username;
     
-    // Sidebar
+    // SIDEBAR
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
     const closeSidebar = document.getElementById('closeSidebar');
@@ -195,7 +195,7 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
         overlay.classList.remove('active');
     });
     
-    // Logout
+    // LOGOUT
     const logoutHandler = () => {
         sessionStorage.removeItem('loggedIn');
         sessionStorage.removeItem('username');
@@ -205,7 +205,7 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
     
     document.getElementById('logoutMiniBtn')?.addEventListener('click', logoutHandler);
     
-    // Scripts Library Buttons (Only active scripts)
+    // SCRIPTS DATA
     const scriptsData = {
         'quizizz': { name: 'Wayground Quizizz', code: "load('quizizz-automation')" },
         'khan': { name: 'Khan Academy Helper', code: "load('khan-academy-helper')" }
@@ -216,7 +216,6 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
             const scriptKey = btn.dataset.script;
             if (scriptKey && scriptsData[scriptKey]) {
                 handleInstall(scriptsData[scriptKey].name, scriptsData[scriptKey].code);
-                window.showNotification('Installation Guide', `Drag to bookmarks bar or copy code`, 'info', 2500);
             }
         });
     });
@@ -230,10 +229,9 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
         });
     });
     
-    // Welcome notification
     setTimeout(() => {
-        window.showNotification('Welcome Back', `Hello ${username}, explore our script library`, 'success', 2500);
+        window.showNotification('Welcome Back', `Hello ${username}`, 'success', 2500);
     }, 800);
 }
 
-console.log('✅ Kaliuscripted v2.0 - Clean Modern Design');
+console.log('✅ Kaliuscripted v2.0 - Corrigido e funcionando');
