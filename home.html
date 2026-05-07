@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="header-right">
-            <div class="user-info">
+            <div class="user-info-header">
                 <div class="user-avatar" id="userAvatar">DV</div>
                 <span id="userNameDisplay">Dev</span>
             </div>
@@ -39,16 +39,27 @@
             </div>
             <button id="closeSidebar" class="close-sidebar">&times;</button>
         </div>
+        
+        <!-- User Viewer na Sidebar -->
+        <div class="sidebar-user-viewer">
+            <div class="sidebar-avatar" id="sidebarAvatar">DV</div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-username" id="sidebarUsername">Dev</span>
+                <span class="sidebar-userstatus">Online</span>
+            </div>
+        </div>
+
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active" data-page="home">
+            <a href="home.html" class="nav-item active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="#" class="nav-item" data-page="scripts">
-                <i class="fas fa-code"></i>
-                <span>Scripts</span>
+            <a href="scripts.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Scripts Store</span>
             </a>
         </nav>
+        
         <div class="sidebar-footer">
             <button id="logoutBtn" class="logout-sidebar-btn">
                 <i class="fas fa-sign-out-alt"></i>
@@ -59,9 +70,8 @@
 
     <div id="overlay" class="overlay"></div>
 
-    <!-- Main Content - NO SCROLL -->
+    <!-- Main Content -->
     <main class="main-content">
-        <!-- Home Page -->
         <div id="homePage" class="page active">
             <div class="welcome-box">
                 <h1>Welcome, <span id="welcomeName">Dev</span>!</h1>
@@ -70,7 +80,7 @@
             
             <div class="stats-box">
                 <div class="stat-number">
-                    <h2>5</h2>
+                    <h2>6</h2>
                     <span>Scripts Available</span>
                 </div>
                 <div class="stat-info">
@@ -78,91 +88,22 @@
                     <p>Educational purposes only</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Scripts Page -->
-        <div id="scriptsPage" class="page">
-            <h2 class="page-title"><i class="fas fa-code"></i> Script Library</h2>
-            
-            <!-- Featured Script (Big one) -->
-            <div class="script-featured">
-                <div class="featured-icon">
-                    <i class="fas fa-dragon"></i>
-                </div>
-                <div class="featured-info">
-                    <h3>Auto Farm Master</h3>
-                    <p>Complete automation system for resource collection</p>
-                </div>
-                <div class="featured-actions">
-                    <button class="install-btn" data-script="autofarm-master">
-                        <i class="fas fa-download"></i> Install
-                    </button>
-                    <button class="copy-btn" data-code="load('autofarm-master')">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-            </div>
-
-            <!-- Small Scripts Grid (2 columns) -->
-            <div class="scripts-small-grid">
-                <div class="script-small">
-                    <div class="small-icon"><i class="fas fa-shield-alt"></i></div>
-                    <div class="small-info">
-                        <h4>Anti-Ban Shield</h4>
-                        <p>Protection system</p>
+            <div class="featured-scripts">
+                <h3><i class="fas fa-fire"></i> Active Scripts</h3>
+                <div class="active-scripts-list">
+                    <div class="active-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Wayground Quizizz</span>
                     </div>
-                    <div class="small-actions">
-                        <button class="install-small" data-script="antiban-shield">Install</button>
-                        <button class="copy-small" data-code="load('antiban-shield')">Copy</button>
-                    </div>
-                </div>
-
-                <div class="script-small">
-                    <div class="small-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    <div class="small-info">
-                        <h4>Speed Boost Pro</h4>
-                        <p>Movement enhancer</p>
-                    </div>
-                    <div class="small-actions">
-                        <button class="install-small" data-script="speedboost-pro">Install</button>
-                        <button class="copy-small" data-code="load('speedboost-pro')">Copy</button>
-                    </div>
-                </div>
-
-                <div class="script-small">
-                    <div class="small-icon"><i class="fas fa-eye"></i></div>
-                    <div class="small-info">
-                        <h4>ESP Viewer</h4>
-                        <p>Visual enhancement</p>
-                    </div>
-                    <div class="small-actions">
-                        <button class="install-small" data-script="esp-viewer">Install</button>
-                        <button class="copy-small" data-code="load('esp-viewer')">Copy</button>
-                    </div>
-                </div>
-
-                <div class="script-small">
-                    <div class="small-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="small-info">
-                        <h4>Resource Tracker</h4>
-                        <p>Real-time monitoring</p>
-                    </div>
-                    <div class="small-actions">
-                        <button class="install-small" data-script="resource-tracker">Install</button>
-                        <button class="copy-small" data-code="load('resource-tracker')">Copy</button>
+                    <div class="active-badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Khan Academy</span>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- Drag to Favicon Guide -->
-    <div id="dragGuide" class="drag-guide" style="display: none;">
-        <div class="drag-content">
-            <i class="fas fa-star"></i>
-            <p>Drag to bookmarks bar</p>
-        </div>
-    </div>
 
     <div id="notificationContainer" class="notification-container"></div>
 
