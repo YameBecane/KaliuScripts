@@ -3,7 +3,7 @@ const canvas = document.getElementById('particlesCanvas');
 if (canvas) {
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const PARTICLE_COUNT = 50;
+    const PARTICLE_COUNT = 40;
 
     class Particle {
         constructor() {
@@ -12,7 +12,7 @@ if (canvas) {
             this.size = Math.random() * 2 + 0.5;
             this.speedX = (Math.random() - 0.5) * 0.2;
             this.speedY = (Math.random() - 0.5) * 0.15;
-            this.opacity = Math.random() * 0.3 + 0.1;
+            this.opacity = Math.random() * 0.25 + 0.05;
         }
         update() {
             this.x += this.speedX;
@@ -52,13 +52,13 @@ if (canvas) {
     animateParticles();
 }
 
-// Notification System
+// Notification System Global
 const notificationContainer = document.getElementById('notificationContainer');
 
 window.showNotification = function(title, message, type = 'info', duration = 3000) {
     if (!notificationContainer) return;
     
-    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
     
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -98,13 +98,19 @@ async function copyToClipboard(text, scriptName) {
     }
 }
 
-// Show Drag Guide
+// Drag Guide
 let dragTimeout;
 function showDragGuide(scriptName) {
-    const guide = document.getElementById('dragGuide');
-    if (!guide) return;
-    const dragContent = guide.querySelector('.drag-content');
-    dragContent.innerHTML = `<i class="fas fa-star"></i><p>Drag "${scriptName}" to bookmarks bar</p>`;
+    let guide = document.getElementById('dragGuide');
+    if (!guide) {
+        guide = document.createElement('div');
+        guide.id = 'dragGuide';
+        guide.className = 'drag-guide';
+        guide.innerHTML = '<div class="drag-content"><i class="fas fa-star"></i><p></p></div>';
+        document.body.appendChild(guide);
+    }
+    const dragContent = guide.querySelector('.drag-content p');
+    dragContent.textContent = `Drag "${scriptName}" to bookmarks bar`;
     guide.style.display = 'flex';
     
     if (dragTimeout) clearTimeout(dragTimeout);
@@ -113,7 +119,6 @@ function showDragGuide(scriptName) {
     }, 4000);
 }
 
-// Handle Install
 function handleInstall(scriptName, code) {
     showDragGuide(scriptName);
     copyToClipboard(code, scriptName);
@@ -133,10 +138,10 @@ if (loginForm) {
         if (username === FIXED_USERNAME && password === FIXED_PASSWORD) {
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('username', username);
-            window.showNotification('Login Successful', `Welcome back, ${username}!`, 'success');
-            setTimeout(() => { window.location.href = 'home.html'; }, 500);
+            window.showNotification('Login Successful', `Welcome back, ${username}!`, 'success', 2000);
+            setTimeout(() => { window.location.href = 'home.html'; }, 600);
         } else {
-            window.showNotification('Login Failed', 'Invalid credentials. Try: Dev / 86271415', 'error');
+            window.showNotification('Login Failed', 'Invalid credentials. Try: Dev / 86271415', 'error', 3000);
             document.getElementById('password').value = '';
         }
     });
@@ -144,15 +149,17 @@ if (loginForm) {
     document.getElementById('discordBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         window.open('https://discord.gg/kaliuscripted', '_blank');
+        window.showNotification('External Link', 'Opening Discord', 'info', 1500);
     });
     document.getElementById('youtubeBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         window.open('https://youtube.com/@kaliuscripted', '_blank');
+        window.showNotification('External Link', 'Opening YouTube', 'info', 1500);
     });
 }
 
-// HOME & SCRIPTS PAGES
-if (window.location.pathname.includes('home.html') || window.location.pathname.includes('scripts.html')) {
+// HOME & LIBRARY PAGES
+if (window.location.pathname.includes('home.html') || window.location.pathname.includes('library.html')) {
     if (sessionStorage.getItem('loggedIn') !== 'true') {
         window.location.href = 'login.html';
     }
@@ -161,10 +168,10 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
     const userInitials = username.substring(0, 2).toUpperCase();
     
     // Update all user elements
-    document.querySelectorAll('#userAvatar, #sidebarAvatar').forEach(el => {
+    document.querySelectorAll('#userInitialsMini, #sidebarAvatarFooter').forEach(el => {
         if (el) el.textContent = userInitials;
     });
-    document.querySelectorAll('#userNameDisplay, #sidebarUsername').forEach(el => {
+    document.querySelectorAll('#sidebarUsernameFooter').forEach(el => {
         if (el) el.textContent = username;
     });
     document.getElementById('welcomeName')?.textContent = username;
@@ -189,29 +196,32 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
     });
     
     // Logout
-    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    const logoutHandler = () => {
         sessionStorage.removeItem('loggedIn');
         sessionStorage.removeItem('username');
-        window.showNotification('Logged Out', 'You have been logged out', 'info');
-        setTimeout(() => { window.location.href = 'login.html'; }, 500);
-    });
+        window.showNotification('Logged Out', 'You have been logged out successfully', 'info', 2000);
+        setTimeout(() => { window.location.href = 'login.html'; }, 600);
+    };
     
-    // Scripts Store Buttons (Active scripts only)
+    document.getElementById('logoutMiniBtn')?.addEventListener('click', logoutHandler);
+    
+    // Scripts Library Buttons (Only active scripts)
     const scriptsData = {
         'quizizz': { name: 'Wayground Quizizz', code: "load('quizizz-automation')" },
         'khan': { name: 'Khan Academy Helper', code: "load('khan-academy-helper')" }
     };
     
-    document.querySelectorAll('.install-card:not(.disabled)').forEach(btn => {
+    document.querySelectorAll('.btn-install:not(.disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             const scriptKey = btn.dataset.script;
             if (scriptKey && scriptsData[scriptKey]) {
                 handleInstall(scriptsData[scriptKey].name, scriptsData[scriptKey].code);
+                window.showNotification('Installation Guide', `Drag to bookmarks bar or copy code`, 'info', 2500);
             }
         });
     });
     
-    document.querySelectorAll('.copy-card:not(.disabled)').forEach(btn => {
+    document.querySelectorAll('.btn-copy:not(.disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             const scriptKey = btn.dataset.script;
             if (scriptKey && scriptsData[scriptKey]) {
@@ -219,6 +229,11 @@ if (window.location.pathname.includes('home.html') || window.location.pathname.i
             }
         });
     });
+    
+    // Welcome notification
+    setTimeout(() => {
+        window.showNotification('Welcome Back', `Hello ${username}, explore our script library`, 'success', 2500);
+    }, 800);
 }
 
-console.log('✅ Kaliuscripted v2.0 - Scripts Store loaded');
+console.log('✅ Kaliuscripted v2.0 - Clean Modern Design');
