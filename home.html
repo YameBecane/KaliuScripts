@@ -26,9 +26,6 @@
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">DV</div>
                 <span id="userNameDisplay">Dev</span>
-                <button id="logoutBtn" class="logout-header-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
             </div>
         </div>
     </header>
@@ -51,186 +48,121 @@
                 <i class="fas fa-code"></i>
                 <span>Scripts</span>
             </a>
-            <a href="#" class="nav-item" data-page="console">
-                <i class="fas fa-terminal"></i>
-                <span>Console</span>
-            </a>
-            <a href="#" class="nav-item" data-page="settings">
-                <i class="fas fa-sliders-h"></i>
-                <span>Settings</span>
-            </a>
-            <a href="#" class="nav-item" data-page="about">
-                <i class="fas fa-info-circle"></i>
-                <span>About</span>
-            </a>
         </nav>
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="logout-sidebar-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
     </aside>
 
     <div id="overlay" class="overlay"></div>
 
-    <!-- Main Content -->
+    <!-- Main Content - NO SCROLL -->
     <main class="main-content">
         <!-- Home Page -->
         <div id="homePage" class="page active">
             <div class="welcome-box">
-                <h1>Welcome back, <span id="welcomeName">Dev</span>!</h1>
-                <p>Ready to execute some scripts?</p>
+                <h1>Welcome, <span id="welcomeName">Dev</span>!</h1>
+                <p>This is an educational JavaScript library for browser-based scripting experiments. Learn, test, and run scripts in a safe environment.</p>
             </div>
             
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-code"></i>
-                    <div>
-                        <h3>24</h3>
-                        <span>Scripts Available</span>
-                    </div>
+            <div class="stats-box">
+                <div class="stat-number">
+                    <h2>5</h2>
+                    <span>Scripts Available</span>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-play-circle"></i>
-                    <div>
-                        <h3>156</h3>
-                        <span>Executions Today</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div>
-                        <h3>1.2k</h3>
-                        <span>Active Users</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
-                <div class="action-buttons">
-                    <button class="action-btn" id="openConsoleFromHome">
-                        <i class="fas fa-terminal"></i> Open Console
-                    </button>
-                    <button class="action-btn" id="refreshBtn">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
+                <div class="stat-info">
+                    <i class="fas fa-graduation-cap"></i>
+                    <p>Educational purposes only</p>
                 </div>
             </div>
         </div>
 
         <!-- Scripts Page -->
         <div id="scriptsPage" class="page">
-            <h2><i class="fas fa-code"></i> Script Library</h2>
-            <div class="scripts-grid">
-                <div class="script-card">
-                    <i class="fas fa-chart-line"></i>
-                    <div>
-                        <h4>Auto Farm</h4>
-                        <p>Automatic resource collection</p>
-                        <code>load("autofarm")</code>
-                    </div>
-                    <button class="run-script" data-script="console.log('Auto Farm executed!'); window.showNotification('Auto Farm', 'Started successfully!', 'success');">
-                        <i class="fas fa-play"></i> Run
+            <h2 class="page-title"><i class="fas fa-code"></i> Script Library</h2>
+            
+            <!-- Featured Script (Big one) -->
+            <div class="script-featured">
+                <div class="featured-icon">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <div class="featured-info">
+                    <h3>Auto Farm Master</h3>
+                    <p>Complete automation system for resource collection</p>
+                </div>
+                <div class="featured-actions">
+                    <button class="install-btn" data-script="autofarm-master">
+                        <i class="fas fa-download"></i> Install
+                    </button>
+                    <button class="copy-btn" data-code="load('autofarm-master')">
+                        <i class="fas fa-copy"></i> Copy
                     </button>
                 </div>
-                <div class="script-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <h4>Anti-Ban</h4>
-                        <p>Bypass detection systems</p>
-                        <code>load("antiban")</code>
+            </div>
+
+            <!-- Small Scripts Grid (2 columns) -->
+            <div class="scripts-small-grid">
+                <div class="script-small">
+                    <div class="small-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="small-info">
+                        <h4>Anti-Ban Shield</h4>
+                        <p>Protection system</p>
                     </div>
-                    <button class="run-script" data-script="console.log('Anti-Ban activated!'); window.showNotification('Anti-Ban', 'Protection enabled!', 'success');">
-                        <i class="fas fa-play"></i> Run
-                    </button>
-                </div>
-                <div class="script-card">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <div>
-                        <h4>Speed Boost</h4>
-                        <p>Increase movement speed</p>
-                        <code>load("speedboost")</code>
+                    <div class="small-actions">
+                        <button class="install-small" data-script="antiban-shield">Install</button>
+                        <button class="copy-small" data-code="load('antiban-shield')">Copy</button>
                     </div>
-                    <button class="run-script" data-script="console.log('Speed Boost activated!'); window.showNotification('Speed Boost', 'Movement speed increased!', 'success');">
-                        <i class="fas fa-play"></i> Run
-                    </button>
                 </div>
-                <div class="script-card">
-                    <i class="fas fa-eye"></i>
-                    <div>
+
+                <div class="script-small">
+                    <div class="small-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <div class="small-info">
+                        <h4>Speed Boost Pro</h4>
+                        <p>Movement enhancer</p>
+                    </div>
+                    <div class="small-actions">
+                        <button class="install-small" data-script="speedboost-pro">Install</button>
+                        <button class="copy-small" data-code="load('speedboost-pro')">Copy</button>
+                    </div>
+                </div>
+
+                <div class="script-small">
+                    <div class="small-icon"><i class="fas fa-eye"></i></div>
+                    <div class="small-info">
                         <h4>ESP Viewer</h4>
-                        <p>See through walls</p>
-                        <code>load("esp")</code>
+                        <p>Visual enhancement</p>
                     </div>
-                    <button class="run-script" data-script="console.log('ESP Viewer enabled!'); window.showNotification('ESP Viewer', 'Visual enhancement active!', 'info');">
-                        <i class="fas fa-play"></i> Run
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Console Page -->
-        <div id="consolePage" class="page">
-            <h2><i class="fas fa-terminal"></i> JavaScript Console</h2>
-            <div class="console-area">
-                <div id="consoleOutput" class="console-output">
-                    <div>> Kaliuscripted Console v2.0</div>
-                    <div>> Ready for input</div>
-                </div>
-                <div class="console-input-area">
-                    <span class="prompt">$&gt;</span>
-                    <textarea id="consoleInput" placeholder="// Write your JavaScript code here...&#10;console.log('Hello World!');"></textarea>
-                    <div class="console-actions">
-                        <button id="executeBtn" class="console-execute"><i class="fas fa-play"></i> Execute</button>
-                        <button id="clearConsoleBtn" class="console-clear"><i class="fas fa-trash"></i> Clear</button>
+                    <div class="small-actions">
+                        <button class="install-small" data-script="esp-viewer">Install</button>
+                        <button class="copy-small" data-code="load('esp-viewer')">Copy</button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Settings Page -->
-        <div id="settingsPage" class="page">
-            <h2><i class="fas fa-sliders-h"></i> Settings</h2>
-            <div class="settings-group">
-                <div class="setting-item">
-                    <div><i class="fas fa-palette"></i> Dark Mode</div>
-                    <label class="toggle">
-                        <input type="checkbox" id="darkModeToggle">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div><i class="fas fa-bell"></i> Notifications</div>
-                    <label class="toggle">
-                        <input type="checkbox" id="notifToggle" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <div><i class="fas fa-rocket"></i> Auto Execute</div>
-                    <label class="toggle">
-                        <input type="checkbox" id="autoExecToggle">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>Account Info</h3>
-                <p><strong>Username:</strong> <span id="settingsUsername">Dev</span></p>
-                <p><strong>Status:</strong> <span class="badge">Active</span></p>
-            </div>
-        </div>
-
-        <!-- About Page -->
-        <div id="aboutPage" class="page">
-            <h2><i class="fas fa-info-circle"></i> About</h2>
-            <div class="about-content">
-                <i class="fas fa-terminal about-icon"></i>
-                <h3>Kaliuscripted v2.0</h3>
-                <p>Modern IMGUI-style menu for script management and execution.</p>
-                <div class="about-links">
-                    <a href="#" class="about-link" id="aboutDiscord"><i class="fab fa-discord"></i> Discord</a>
-                    <a href="#" class="about-link" id="aboutYoutube"><i class="fab fa-youtube"></i> YouTube</a>
+                <div class="script-small">
+                    <div class="small-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="small-info">
+                        <h4>Resource Tracker</h4>
+                        <p>Real-time monitoring</p>
+                    </div>
+                    <div class="small-actions">
+                        <button class="install-small" data-script="resource-tracker">Install</button>
+                        <button class="copy-small" data-code="load('resource-tracker')">Copy</button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Drag to Favicon Guide -->
+    <div id="dragGuide" class="drag-guide" style="display: none;">
+        <div class="drag-content">
+            <i class="fas fa-star"></i>
+            <p>Drag to bookmarks bar</p>
+        </div>
+    </div>
 
     <div id="notificationContainer" class="notification-container"></div>
 
